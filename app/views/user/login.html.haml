@@ -1,0 +1,14 @@
+- if flash[:message]
+  .alert.alert-info{:role => "alert"}
+    = flash[:message]
+
+- if flash[:error]
+  .alert.alert-danger{:role => "error"}
+    = flash[:error]
+
+
+= form_tag('process_login', class: 'form-signin') do
+  %h2.form-signin-heading Vous connecter
+  = email_field_tag('user[username]',    'Email address', class: 'form-control')
+  = password_field_tag('user[password]', 'Password',   class: 'form-control')
+  = submit_tag('Se connecter', class: 'btn.btn-lg.btn-primary.btn-block')
