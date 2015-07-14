@@ -44,9 +44,14 @@ group :development, :test do
   gem 'spring'
   gem 'rspec-rails'
   gem 'factory_girl_rails'
+  gem 'quiet_assets'
+  gem 'better_errors'
 end
 
 gem 'pry-rails'
 gem 'poltergeist'
 gem 'haml-rails'
+gem 'peek' # rails bar
 
+
+gem "awesome_print", require:"ap"
