@@ -1,0 +1,18 @@
+
+
+
+%h2.form-signin-heading Vous enregistrer avec vos indentifiants A Little Market
+
+- if @user.errors.any?
+  - @user.errors.each do |attr, msg|
+    .alert.alert-danger{:role => "error"}
+      - if attr.to_s == 'username'
+        = "Email: #{msg}"
+      - else
+        = "#{attr}: #{msg}"
+
+= form_tag('process_registration', class: 'form-signin') do
+  = email_field_tag('user[username]',@user.username, class: 'form-control', placeholder: 'Email address')
+  = text_field_tag('user[password]', '', class: 'form-control', placeholder: 'Password')
+  = submit_tag("S'enregister", class: 'btn.btn-lg.btn-primary.btn-block')
+

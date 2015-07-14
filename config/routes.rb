@@ -1,8 +1,11 @@
 Rails.application.routes.draw do
   get 'user/login'
 
-  post 'user/process_login'
+  get 'user/register'
 
+  post 'user/process_login'
+  post 'user/process_registration'
+  
   get 'user/logout'
 
   get 'user/my_account'

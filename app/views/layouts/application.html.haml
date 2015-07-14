@@ -8,4 +8,11 @@
     = csrf_meta_tags
   %body
     .container
+      - if flash[:message]
+        .alert.alert-info{:role => "alert"}
+          = flash[:message]
+
+      - if flash[:error]
+        .alert.alert-danger{:role => "error"}
+          = flash[:error]
       = yield
