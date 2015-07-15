@@ -17,7 +17,6 @@ RSpec.describe "users requests page", :type => :feature do
     visit "/user/register"
     fill_in "user[username]", :with => "jdoe"
     fill_in "user[password]", :with => "secret"
-    uncheck 'user_check_little_ids'
     click_button "S'enregister"
     expect(page).to have_content 'welcome index'
   end

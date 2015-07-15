@@ -54,6 +54,5 @@ gem 'pry-rails'
 gem 'poltergeist'
 gem 'haml-rails'
 gem 'peek' # rails bar
-
-
+gem 'nokogiri'
 gem "awesome_print", require:"ap"

@@ -244,6 +244,7 @@ DEPENDENCIES
   haml-rails
   jbuilder (~> 2.0)
   jquery-rails
+  nokogiri
   peek
   poltergeist
   pry-rails
