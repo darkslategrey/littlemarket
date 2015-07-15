@@ -19,6 +19,47 @@
 require 'capybara/rspec'
 
 RSpec.configure do |config|
+
+
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :transaction
+  end
+  
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+  
+  config.after(:suite) do
+    DatabaseCleaner.clean
+  end
+
+  # config.use_transactional_fixtures = false
+  # DatabaseCleaner.strategy = example.metadata[:js] ? :truncation : :transaction
+  # config.before(:each) do
+  #   DatabaseCleaner.clean_with(:truncation)
+  # end
+
+  # config.before(:each) do |example|
+  #   DatabaseCleaner.strategy = example.metadata[:js] ? :truncation : :transaction
+  #   DatabaseCleaner.start
+  # end
+
+  # config.after(:each) do
+  #   DatabaseCleaner.clean
+  # end
+
+  # config.before(:suite) do
+  #   DatabaseCleaner.strategy = :transaction
+  #   DatabaseCleaner.clean_with(:truncation)
+  # end
+
+  # config.around(:each) do |example|
+  #   DatabaseCleaner.cleaning do
+  #     example.run
+  #   end
+  # end
+  
+
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.

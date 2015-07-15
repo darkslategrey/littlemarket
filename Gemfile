@@ -46,6 +46,8 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'quiet_assets'
   gem 'better_errors'
+  gem 'selenium-webdriver'
+  gem 'database_cleaner'
 end
 
 gem 'pry-rails'

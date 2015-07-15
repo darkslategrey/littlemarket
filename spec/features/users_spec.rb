@@ -2,11 +2,10 @@
 require 'rails_helper'
 
 
-RSpec.describe "users requests page", :type => :feature do
-
+RSpec.describe "users requests page", :type => :feature do 
 
   it "displays the welcome#index after successful login" do
-    user = FactoryGirl.create(:user, :username => "jdoe", :password => "secret")
+    User.create :username => "jdoe", :password => "secret"
     visit "/user/login"
     fill_in "user[username]", :with => "jdoe"
     fill_in "user[password]", :with => "secret"
@@ -18,6 +17,7 @@ RSpec.describe "users requests page", :type => :feature do
     visit "/user/register"
     fill_in "user[username]", :with => "jdoe"
     fill_in "user[password]", :with => "secret"
+    uncheck 'user_check_little_ids'
     click_button "S'enregister"
     expect(page).to have_content 'welcome index'
   end
@@ -32,7 +32,7 @@ RSpec.describe "users requests page", :type => :feature do
 
 
   it "must display error when duplicate email is detected" do
-    user = FactoryGirl.create(:user, :username => "jdoe", :password => "secret")    
+    FactoryGirl.create(:user, :username => "jdoe", :password => "secret")    
     visit "/user/register"
     fill_in "user[username]", :with => "jdoe"
     fill_in "user[password]", :with => "secret"
@@ -40,5 +40,6 @@ RSpec.describe "users requests page", :type => :feature do
     expect(page).to have_content 'déjà enregistré'
   end
 
+ 
 end
 

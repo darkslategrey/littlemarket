@@ -12,7 +12,9 @@
         = "#{attr}: #{msg}"
 
 = form_tag('process_registration', class: 'form-signin') do
-  = email_field_tag('user[username]',@user.username, class: 'form-control', placeholder: 'Email address')
-  = text_field_tag('user[password]', '', class: 'form-control', placeholder: 'Password')
+  = email_field(:user, :username, { class: 'form-control', placeholder: 'Email address', value: @user.username })
+  = text_field(:user, :password, { value: @user.password, class: 'form-control', placeholder: 'Password' })
+  %label{ for: 'user_check_little_ids' } Véfifier les identifiants sur little market ?
+  = check_box(:user, :check_little_ids)
   = submit_tag("S'enregister", class: 'btn.btn-lg.btn-primary.btn-block')
 
