@@ -3,14 +3,28 @@
 
 
 require 'rails_helper'
+require 'pp'
+
 require_relative '../../lib/little_market'
 
 RSpec.describe 'LittleMarket module' do
 
+  describe 'LittleMarket::CreationsParser' do
+    let(:noko_doc) { Nokogiri::HTML(IO.read('spec/fixtures/mes_creations.htm')) }
+    let(:parser)   { LittleMarket::CreationsParser.new(noko_doc) }
 
-  describe 'LittleMarket::Parser' do
+    it "should extract the edit urls" do
+      urls = ['http://www.alittlemarket.com/page/creation/add.php?page_en_cours=1&action=edit&sell_id=15385431&page_en_cours=1',
+              'http://www.alittlemarket.com/page/creation/add.php?page_en_cours=1&action=edit&sell_id=15353631&page_en_cours=1'
+             ]
+      expect(Set.new(parser.edit_urls)).to eq Set.new(urls)
+    end
+    
+  end
+
+  describe 'LittleMarket::CreationParser' do
     let(:noko_doc) { Nokogiri::HTML(IO.read('spec/fixtures/crea_edit_page.htm')) }
-    let(:parser)   { LittleMarket::Parser.new(noko_doc) }
+    let(:parser)   { LittleMarket::CreationParser.new(noko_doc) }
 
     it "should get the id" do
       expect(parser.get_id).to eq "15385431"
@@ -73,24 +87,10 @@ RSpec.describe 'LittleMarket module' do
       expect(parser.get_deliveries).to eq deliveries
     end
 
-    xit "should get the options" do
-      options = { reserve: "", date: "" }
+    it "should get the options" do
+      options = { reserve: nil, date: "0000-00-00 00" }
       expect(parser.get_options).to eq options
     end
-    
-  end
-
-  
-  describe '#get_creations' do
-    
-    xit 'should return the creations list from LM' do
-      conn = LittleMarket::Connection.new 'lucien.farstein@gmail.com', 'toto555500'
-      expect(conn.connected?).to be true
-      creations = LittleMarket::Utils.get_creations
-      puts creations
-      expect(creations).to be
-    end
-    
   end
   
 end

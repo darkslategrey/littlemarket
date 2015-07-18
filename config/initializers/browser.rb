@@ -4,7 +4,7 @@ require 'capybara/poltergeist'
 phantomjs = RUBY_PLATFORM.include?('mingw') ? 'phantomjs.exe' : 'phantomjs'
     
 Capybara.register_driver :poltergeist do |app|
-  options = { :phantomjs => "#{Rails.root.to_s}/bin/#{phantomjs}" }
+  options = { :phantomjs => "#{Rails.root.to_s}/bin/#{phantomjs}", :js_errors => false }
   Capybara::Poltergeist::Driver.new(app, options)
 end
 

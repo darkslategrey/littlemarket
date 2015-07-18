@@ -27,17 +27,17 @@ RSpec.describe "little market", :type => :feature do
 
   end
 
-  context "when user is logged in and identified by LM" do
+  # context "when user is logged in and identified by LM" do
 
-    it "must show creations on the welcome#index page" do
-      visit "/user/login"
-      fill_in "user[username]", :with => "lucien.farstein@gmail.com"
-      fill_in "user[password]", :with => "toto555500"
-      click_button "Se connecter"
-      expect(page).to have_xpath '//table/tr' 
-    end
+  #   xit "must show creations on the welcome#index page" do
+  #     visit "/user/login"
+  #     fill_in "user[username]", :with => "lucien.farstein@gmail.com"
+  #     fill_in "user[password]", :with => "toto555500"
+  #     click_button "Se connecter"
+  #     expect(page).to have_xpath '//table/tr' 
+  #   end
     
-  end
-  
+  # end
+
 
 end

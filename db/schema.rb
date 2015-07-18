@@ -11,7 +11,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150715004602) do
+ActiveRecord::Schema.define(version: 20150718083859) do
+
+  create_table "creations", force: :cascade do |t|
+    t.integer  "lm_id"
+    t.string   "imgs"
+    t.string   "categs"
+    t.string   "title"
+    t.string   "subtitle"
+    t.text     "desc"
+    t.string   "tags"
+    t.string   "materials"
+    t.string   "colors"
+    t.string   "styles"
+    t.string   "events"
+    t.string   "dest"
+    t.string   "prices"
+    t.string   "deliveries"
+    t.string   "options"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "username"
