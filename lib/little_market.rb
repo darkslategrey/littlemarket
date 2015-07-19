@@ -4,8 +4,15 @@
 
 module LittleMarket
 
-  PRODUCTS_URL = 'http://www.alittlemarket.com/page/creation/list.php'
+  class ParseError < Exception
 
+    def initiliaze msg
+      super msg
+      Rails.logger.error e
+    end
+    
+  end
+  
   class CreationParser
 
     def initialize html
@@ -15,10 +22,18 @@ module LittleMarket
     def extract
       creation = {}
       [:id, :imgs, :categs, :title, :subtitle, :desc, :tags, :materials].each do |attr|
-        creation[attr] = send "get_#{attr}".to_sym
+        begin
+          creation[attr] = send "get_#{attr}".to_sym
+        rescue ParseError => e
+          creation[attr] = nil
+        end
       end
       [:colors, :styles, :events, :dest, :prices, :deliveries, :options].each do |attr|
-        creation[attr] = send "get_#{attr}".to_sym          
+        begin
+          creation[attr] = send "get_#{attr}".to_sym
+        rescue ParseError => e
+          creation[attr] = nil
+        end
       end
       creation
     end
@@ -26,7 +41,11 @@ module LittleMarket
     def get_id
       xpath = '/html/body/div[2]/div/div[3]/div[1]/div[1]/div[1]/h1/div/a[2]'
       # href ex: http://www.alittlemarket.com/sell_display.php?sell_id=15385431
-      @html.xpath(xpath).first.attr('href').split('=')[1]
+      begin
+        @html.xpath(xpath).first.attr('href').split('=')[1]
+      rescue
+        raise ParseError.new("get_id error")
+      end
     end
 
     # TODO: implement the LittleMarket::Parser.get_imgs 
@@ -48,62 +67,104 @@ module LittleMarket
     end
 
     def get_title
-      @html.xpath('//input[@id="titre"]').attribute('value')
+      begin
+        @html.xpath('//input[@id="titre"]').attribute('value').value
+      rescue
+        raise ParseError.new 'get_title error'
+      end
     end
 
     def get_subtitle
-      @html.xpath('//input[@id="subtitle"]').attribute('value')      
+      begin
+        @html.xpath('//input[@id="subtitle"]').attribute('value').value
+      rescue
+        raise ParseError.new 'get_subtitle error'
+      end
     end
     
     def get_desc
-      @html.xpath('//textarea[@id="texte"]').text
+      begin
+        @html.xpath('//textarea[@id="texte"]').text
+      rescue
+        raise ParseError.new 'get_desc error'
+      end
     end
 
     def get_tags
-      @html.css('li.tagName').map do |e| e.child.text.strip end
+      begin
+        @html.css('li.tagName').map do |e| e.child.text.strip end
+      rescue
+        raise ParseError.new 'get_tags error'
+      end
     end
 
     def get_materials
-      @html.xpath('//div[@id="liste_matieres"]//strong').map do |e| e.text end
+      begin
+        @html.xpath('//div[@id="liste_matieres"]//strong').map do |e| e.text end
+      rescue
+        raise ParseError.new 'get_materials error'
+      end
     end
 
     def get_colors
-      @html.xpath('//div[@id="liste_colors"]//strong').map do |e| e.text end      
+      begin
+        @html.xpath('//div[@id="liste_colors"]//strong').map do |e| e.text end
+      rescue
+        raise ParseError.new 'get_colors error'
+      end
     end
 
     def get_styles
-      @html.xpath('//div[@id="liste_styles"]//strong').text
+      begin
+        @html.xpath('//div[@id="liste_styles"]//strong').text
+      rescue
+        raise ParseError.new 'get_styles error'
+      end
     end
 
     def get_events
-      @html.xpath('//div[@id="liste_occasion"]//strong').text      
+      begin
+        @html.xpath('//div[@id="liste_occasion"]//strong').text
+      rescue
+        raise ParseError.new 'get_events error'
+      end
     end
 
     def get_dest
-      nodes_set = @html.xpath('//input[@name="destinataire"]/self::input[@checked="checked"]')
-      nodes_set.first.attr('value')
+      begin 
+        nodes_set = @html.xpath('//input[@name="destinataire"]/self::input[@checked="checked"]')
+        nodes_set.first.attr('value')
+      rescue
+        raise ParseError.new 'get_dest error'
+      end
     end
 
     def get_prices
+      pu = @html.xpath('//input[@id="prix"]').first
+      ps = @html.xpath('//input[@id="sell_prix_promo"]').first
+      q  = @html.xpath('//input[@id="qte"]').first
       {
-        prix_unitaire: @html.xpath('//input[@id="prix"]').first.attr("value"),
-        prix_solde:    @html.xpath('//input[@id="sell_prix_promo"]').first.attr("value"),
-        quantity:      @html.xpath('//input[@id="qte"]').first.attr("value")
+        prix_unitaire: pu.nil? ? nil : pu.attr("value"),
+        prix_solde:    ps.nil? ? nil : ps.attr("value"),
+        quantity:      q.nil?  ? nil : q.attr("value")
       }
     end
 
     def get_deliveries
-      profil_set = @html.xpath('//select[@id="profil"]//option[@selected="selected"]')
+      delay   = @html.xpath('//input[@id="delai"]').first
+      profils = @html.xpath('//select[@id="profil"]//option[@selected="selected"]').first
       {
-        delay:  @html.xpath('//input[@id="delai"]').first.attr("value"),
-        profil: profil_set.first.attr('value')
+        delay:  delay.nil?   ? nil : delay.attr("value"),
+        profil: profils.nil? ? nil : profils.attr('value')
       }
     end
 
     def get_options
+      reserve = @html.xpath('//input[@id="pseudo_membre_reservation"]').first
+      date    = @html.xpath('//input[@id="mise_en_ligne"]').first
       {
-        reserve: @html.xpath('//input[@id="pseudo_membre_reservation"]').first.attr('value'),
-        date:    @html.xpath('//input[@id="mise_en_ligne"]').first.attr('value')
+        reserve: reserve.nil? ? nil : reserve.attr('value'),
+        date:    date.nil?    ? nil : date.attr('value')
       }
     end
    
@@ -126,10 +187,12 @@ module LittleMarket
   class Parser
 
     def self.creation html
+      html = html.class == String ? Nokogiri::HTML(html) : html
       CreationParser.new(html).extract
     end
 
     def self.creation_urls html
+      html = html.class == String ? Nokogiri::HTML(html) : html      
       CreationsParser.new(html).edit_urls
     end
 
@@ -170,18 +233,13 @@ module LittleMarket
         BROWSER.fill_in 'login[password]',  :with => @password
         BROWSER.click_button 'Se connecter'
       end
-
-      @connected = BROWSER.has_text? /Bienvenue/
-      
     end
 
 
-    def connected?
-      @connected
+    def self.connected?
+      BROWSER.has_text? /Bienvenue/      
     end
 
   end
 
-
-  
 end

@@ -49,6 +49,7 @@ group :development, :test do
   gem 'selenium-webdriver'
   gem 'database_cleaner'
   gem 'simplecov', :require => false
+  gem 'airborne', :require => false
 end
 
 gem 'pry-rails'
@@ -57,3 +58,5 @@ gem 'haml-rails'
 gem 'peek' # rails bar
 gem 'nokogiri'
 gem "awesome_print", require:"ap"
+gem 'grape'
+gem "hashie-forbidden_attributes"

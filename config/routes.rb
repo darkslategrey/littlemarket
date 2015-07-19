@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+
+  mount LittleMarket::API => '/api'
+  
   get 'user/login'
 
   get 'user/register'
