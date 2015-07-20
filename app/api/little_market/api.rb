@@ -2,7 +2,6 @@
 
 module LittleMarket
 
-
   class API < Grape::API
 
     before do

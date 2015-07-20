@@ -14,12 +14,14 @@ class UserController < ApplicationController
   end
 
   def process_registration
+    @user = nil
     begin
       @user = User.create user_params
       raise if @user.errors.any?
       session[:id] = @user.id
       redirect_to '/'      
     rescue Exception => e
+      logger.error "REGISTER #{@user.errors}"
       flash[:error] = "Problème lors de votre enregistrement : #{e}"
       render :register
     end

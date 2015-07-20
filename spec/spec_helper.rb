@@ -17,10 +17,32 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 require 'capybara/rspec'
+require 'webmock/rspec'
 
 RSpec.configure do |config|
 
+  config.before(:each) do
 
+    stub_request(:get, "http://www.littlemarket.com/").
+      with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'User-Agent'=>'Ruby'}).
+      to_return(:status => 200, :body => "", :headers => {})
+
+    stub_request(:get, "http://www.littlemarket.com/api/creations").
+      with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'User-Agent'=>'Ruby'}).
+      to_return(:status => 200, :body => IO.read('spec/fixtures/mes_creations.htm'), :headers => {})
+
+    stub_request(:get, "http://www.littlemarket.com/page/creation/list.php").
+      with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'User-Agent'=>'Ruby'}).
+      to_return(:status => 200, :body => IO.read('spec/fixtures/mes_creations.htm'), :headers => {})
+
+
+    stub_request(:get, /.*add.php.*/).
+      with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'User-Agent'=>'Ruby'}).
+      to_return(:status => 200, :body => IO.read('spec/fixtures/crea_edit_page.htm'), :headers => {})
+    
+    
+  end
+  
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
   end

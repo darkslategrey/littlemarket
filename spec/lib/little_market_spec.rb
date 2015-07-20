@@ -93,13 +93,4 @@ RSpec.describe 'LittleMarket module' do
     end
   end
 
-
-  describe 'LittleMarket::Connection' do
-
-    it 'should be connected' do
-      connection = LittleMarket::Connection.new 'lucien.farstein@gmail.com', 'toto555500'
-      expect(connection.connected?).to be true
-    end
-    
-  end
 end

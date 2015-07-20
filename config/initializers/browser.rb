@@ -1,6 +1,8 @@
 require 'capybara'
 require 'capybara/poltergeist'
 
+require_relative '../../lib/little_market'
+
 phantomjs = RUBY_PLATFORM.include?('mingw') ? 'phantomjs.exe' : 'phantomjs'
     
 Capybara.register_driver :poltergeist do |app|
@@ -11,5 +13,5 @@ Capybara.register_driver :poltergeist do |app|
 end
 
 # Capybara.default_max_wait_time = 5
-BROWSER = Capybara::Session.new :poltergeist
+BROWSER = LittleMarket::Connection.new({ username: '', password: '', connector: '' })
 

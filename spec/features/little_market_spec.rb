@@ -6,7 +6,7 @@ require 'rails_helper'
 RSpec.describe "little market", :type => :feature do 
 
   context "ids verifications" do 
-    xit 'must display display error when cannot connect to little market' do
+    it 'must display display error when cannot connect to little market' do
       visit "/user/register"
       fill_in "user[username]", :with => "lucien.farstein@gmail.com"
       fill_in "user[password]", :with => "toto55550"
@@ -15,8 +15,7 @@ RSpec.describe "little market", :type => :feature do
       expect(page).to have_content 'pas reconnus'
     end 
 
-
-    xit 'must display display welcome#index with correct ids' do 
+    it 'must display display welcome#index with correct ids' do 
       visit "/user/register"
       fill_in "user[username]", :with => "lucien.farstein@gmail.com"
       fill_in "user[password]", :with => "toto555500"

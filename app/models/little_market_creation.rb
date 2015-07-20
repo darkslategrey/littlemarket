@@ -3,17 +3,15 @@ require_relative '../../lib/little_market'
 
 class LittleMarketCreation
 
-  CREATIONS_PATH = '/page/creation/list.php'
+  CREAPATH = '/page/creation/list.php'
 
   def self.all
-    BROWSER.click_on 'a Mon compte'
-    Capybara.app_host = 'http://www.alittlemarket.com'
-    BROWSER.visit '/page/creation/list.php'
 
     begin
-      creations = LittleMarket::Parser.creation_urls(BROWSER.html).map do |url|
-        BROWSER.visit url
-        LittleMarket::Parser.creation BROWSER.html
+      html = BROWSER.creations_list CREAPATH
+      # Rails.logger.debug "Html : #{html}"
+      creations = LittleMarket::Parser.creation_urls(html).map do |url|
+        LittleMarket::Parser.creation BROWSER.creation(url)
       end
     rescue LittleMarket::ParseError => e
       raise "LittleMarketCreation.all error: #{e}"

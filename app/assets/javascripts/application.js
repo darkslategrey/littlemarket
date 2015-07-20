@@ -11,6 +11,6 @@
 // about supported directives.
 //
 //= require jquery
-//= require bootstrap-sprockets
+//  = require bootstrap-sprockets
 
 
