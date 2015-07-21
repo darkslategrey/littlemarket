@@ -10,7 +10,8 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//= require webcomponentsjs/webcomponents-lite
 //= require jquery
-//  = require bootstrap-sprockets
+
 
 
