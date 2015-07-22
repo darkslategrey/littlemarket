@@ -7,9 +7,10 @@ module LittleMarket
 
     # attr_reader :username, :password, :connector
 
-    attr_accessor :connector, :username, :password
+    attr_accessor :connector, :username, :password, :browser
 
     @@connected = false
+    @@browser   = nil
     
     def initialize params
       @username = params[:username]
@@ -23,6 +24,10 @@ module LittleMarket
       end
     end
 
+    def set_browser browser
+      @@browser = browser
+    end
+    
     def self.browser
       @@browser
     end

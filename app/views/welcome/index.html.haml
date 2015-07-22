@@ -1,6 +1,6 @@
 #spinner-container
   %div{"data-bind" => "visible: showSpinner"}
-    %h3 Chargement de vos creations...
+    %h4 Chargement de vos creations...
     .spinner
 
 
@@ -9,7 +9,8 @@
     %thead
       %tr
         %th
-          %input{:type => 'checkbox'}
+          %input{:type => 'checkbox', 'data-bind' => 'checked: checkAll, click: toogleCreations'}
+            Tous
         %th
           Id
         %th
@@ -19,9 +20,9 @@
     %tbody{"data-bind"=>'foreach: items'}
       %tr
         %td
-          %input{:type => 'checkbox'}        
-        %td{"data-bind"=>'text: id'}
-        %td{"data-bind"=>'text: title'}
+          %input{:type => 'checkbox', 'data-bind' => 'checked: $data.checked'}
+        %td{"data-bind"=>'text: $data.id'}
+        %td{"data-bind"=>'text: $data.title'}
         %td
           %button.btn.btn-success.btn-xs{:type => "button"} Publier
           %button.btn.btn-danger.btn-xs{:type => "button"} Supprimer

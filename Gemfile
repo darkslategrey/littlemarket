@@ -52,6 +52,8 @@ group :development, :test do
   # gem 'airborne', :require => false
   gem 'webmock'
   gem 'rest-client'
+  gem 'vcr'
+  gem 'jasmine-rails'
 end
 
 gem 'pry-rails'
