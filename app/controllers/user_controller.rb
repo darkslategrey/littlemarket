@@ -30,6 +30,7 @@ class UserController < ApplicationController
   def process_login
     if user = User.authenticate(params[:user])
       session[:id] = user.id
+      BROWSER.login({ username: user.username, password: user.password })
       redirect_to session[:return_to] || '/'
     else
       flash[:error] = 'Invalid login.'

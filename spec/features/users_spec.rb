@@ -10,7 +10,7 @@ RSpec.describe "users requests page", :type => :feature do
     fill_in "user[username]", :with => "jdoe"
     fill_in "user[password]", :with => "secret"
     click_button "Se connecter"
-    expect(page).to have_content 'welcome index'
+    expect(page.title.strip).to eq 'Vos créations'
   end
 
   it "displays the welcome#index after user registration" do
@@ -18,7 +18,7 @@ RSpec.describe "users requests page", :type => :feature do
     fill_in "user[username]", :with => "jdoe"
     fill_in "user[password]", :with => "secret"
     click_button "S'enregister"
-    expect(page).to have_content 'welcome index'
+    expect(page.title.strip).to eq 'Vos créations'    
   end
 
   it "must display errors when missing required infos" do 

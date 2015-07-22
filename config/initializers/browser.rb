@@ -13,5 +13,6 @@ Capybara.register_driver :poltergeist do |app|
 end
 
 # Capybara.default_max_wait_time = 5
-BROWSER = LittleMarket::Connection.new({ username: '', password: '', connector: '' })
+connector = ENV['RAILS_ENV'] == 'test' ? :net : :capy
+BROWSER = LittleMarket::Connection.new({ username: '', password: '', connector: connector })
 

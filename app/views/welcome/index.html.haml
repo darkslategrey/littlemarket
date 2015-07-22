@@ -1,3 +1,32 @@
+#spinner-container
+  %div{"data-bind" => "visible: showSpinner"}
+    %h3 Chargement de vos creations...
+    .spinner
 
-welcome index
+
+%div{"data-bind" => "visible: showTable"}
+  %table.table.table-hover
+    %thead
+      %tr
+        %th
+          %input{:type => 'checkbox'}
+        %th
+          Id
+        %th
+          Titre
+        %th
+          Actions
+    %tbody{"data-bind"=>'foreach: items'}
+      %tr
+        %td
+          %input{:type => 'checkbox'}        
+        %td{"data-bind"=>'text: id'}
+        %td{"data-bind"=>'text: title'}
+        %td
+          %button.btn.btn-success.btn-xs{:type => "button"} Publier
+          %button.btn.btn-danger.btn-xs{:type => "button"} Supprimer
+
+
+  %button.btn.btn-success{:type => "button"} Publier la sélection
+  %button.btn.btn-danger{:type => "button"} Supprimer la sélection
 

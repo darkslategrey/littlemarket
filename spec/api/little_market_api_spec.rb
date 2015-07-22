@@ -13,14 +13,15 @@ describe LittleMarket::API, type: :feature do
 
     describe 'GET /api/creations' do
 
-      it 'return empty array of creations' do
+      it 'return an array of creations' do
         params = {
           username:  'lucien.farstein@gmail.com',
           password:  'toto555500',
-          connector: :net
+          connector: LittleMarket::Connector::Net
         }
 
-        BROWSER.connector = LittleMarket::Connector::Net
+        # BROWSER.connector = 
+        BROWSER.login params
         visit '/api/creations'
         json_data = JSON.parse(page.html)
         expect(page.status_code).to eq 200

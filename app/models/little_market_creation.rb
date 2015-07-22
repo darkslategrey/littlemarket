@@ -8,8 +8,7 @@ class LittleMarketCreation
   def self.all
 
     begin
-      html = BROWSER.creations_list CREAPATH
-      # Rails.logger.debug "Html : #{html}"
+      html      = BROWSER.creations_list CREAPATH
       creations = LittleMarket::Parser.creation_urls(html).map do |url|
         LittleMarket::Parser.creation BROWSER.creation(url)
       end

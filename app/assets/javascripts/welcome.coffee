@@ -2,9 +2,27 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-Polymer
-  is: "proto-element",
-  # add a callback to the element's prototype
-  ready: ->
-    this.textContent = "I'm a proto-element. Check out my prototype!"
+  
+class Creation
+  constructor: (@id, @title, @status) ->
+    
 
+class CreationsList
+  items: ko.observableArray([])
+  loadData: ->
+    this.showSpinner true
+    self = this
+    $.getJSON "/api/creations", (creations) ->
+      vm.items.push(new Creation(data.id, data.title, 'supprimée')) for data in creations
+      self.showSpinner false
+      self.showTable   true
+      
+  showSpinner: ko.observable false
+  showTable:   ko.observable false
+
+vm = new CreationsList
+
+
+vm.loadData()
+
+ko.applyBindings vm
