@@ -15,7 +15,7 @@ class Creation < ActiveRecord::Base
       end
       
     end
-    logger.debug "params #{params}"
+
     begin
       Creation.upsertFromLM params, force
     rescue Exception => e
@@ -25,13 +25,13 @@ class Creation < ActiveRecord::Base
   end
 
   def self.upsertFromLM params, force
-    creation = Creation.find_by_lm_id(params["lm_id"])
+    creation = Creation.find_by_lm_id(params[:lm_id])
     if creation.nil?
       creation = Creation.create! params      
     elsif force
       creation.update! params
-    else
-      raise ActiveRecord::ActiveRecordError.new("creation allready exists: #{params['lm_id']}")
+    # else
+    #   raise ActiveRecord::ActiveRecordError.new("creation allready exists: #{params['lm_id']}")
     end
     creation
   end

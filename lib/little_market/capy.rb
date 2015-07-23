@@ -4,6 +4,8 @@ module LittleMarket
 
   module Connector
 
+    class ConnectorError < Exception; end
+    
     class Capy
 
       @@browser = Capybara::Session.new :poltergeist
@@ -33,6 +35,21 @@ module LittleMarket
         Capybara.app_host = 'http://www.alittlemarket.com'
         @@browser.visit '/page/creation/list.php'
         @@browser.html
+      end
+
+      def self.delete_creation id
+        Capybara.app_host = 'http://www.alittlemarket.com'
+        path = '/page/creation/list_action.php?action=delete&page=1&page_en_cours=1'
+        path += "&sell_id=#{id}"
+        Rails.logger.debug "app_host #{Capybara.app_host}"
+        @@browser.visit path
+        @@browser.save_screenshot '/tmp/screenshot'
+        # @@browser.accept_alert do
+        #   click_link('OK')
+        # end
+        if @@browser.status_code > 400
+          raise ConnectorError.new("Error while deleting #{id} creation: #{@@browser.status_code}")
+        end
       end
       
       def self.connected?

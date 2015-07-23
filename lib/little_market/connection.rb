@@ -51,6 +51,10 @@ module LittleMarket
 
     end
 
+    def delete_creation id
+      @connector.delete_creation id
+    end
+    
     def creation url
       @connector.get_creation url
     end

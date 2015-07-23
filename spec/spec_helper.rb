@@ -40,6 +40,11 @@ RSpec.configure do |config|
       with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'User-Agent'=>'Ruby'}).
       to_return(:status => 200, :body => IO.read('spec/fixtures/crea_edit_page.htm'), :headers => {})
     
+    stub_request(:get, /.*action=delete.*/).
+      with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'User-Agent'=>'Ruby'}).
+      to_return(:status => 200, :body => 'deleted', :headers => {})
+    
+    
     
   end
   

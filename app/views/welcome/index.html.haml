@@ -21,19 +21,20 @@
       %tr
         %td
           %input{:type => 'checkbox', 'data-bind' => 'checked: $data.checked'}
-        %td{"data-bind"=>'text: $data.id'}
+        %td{"data-bind"=>'text: $data.lm_id'}
         %td{"data-bind"=>'text: $data.title'}
         %td
-          %button.btn.btn-success.btn-xs{:type => "button", 'data-toogle' => 'tooltip',
-                                         'data-placement' => 'top',
-                                         :title => 'Créer sur Little Market',
-                                         'data-bind' => 'click: $data.publish'}
-            Publier
-          %button.btn.btn-danger.btn-xs{:type => "button", 'data-toogle' => 'tooltip',
+          %div{'data-bind' => 'if: $data.state == "deleted"'}
+            %button.btn.btn-success.btn-xs{:type => "button", 'data-toogle' => 'tooltip',
+                                           'data-placement' => 'top',
+                                           :title => 'Créer sur Little Market',
+                                           'data-bind' => 'click: $data.publish'} Publier
+          %div{'data-bind' => 'if: $data.state == "published"'}
+            %button.btn.btn-danger.btn-xs{:type => "button", 'data-toogle' => 'tooltip',
                                         'data-placement' => 'top',
                                         :title => 'Supprimer de Little Market',
-                                        'data-bind' => 'click: $data.delete'}
-            Supprimer
+                                        'data-bind' => 'click: $data.delete'} Supprimer
+
 
 
   %button.btn.btn-success{:type => "button", 'data-toogle' => 'tooltip',

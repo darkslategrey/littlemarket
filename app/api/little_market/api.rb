@@ -13,7 +13,6 @@ module LittleMarket
     end
     
     before do
-      Rails.logger.debug env.keys
       if !LittleMarket::Connection.connected?
         if !session[:id]
           Rails.logger.debug "NOT Connected !"
@@ -34,13 +33,23 @@ module LittleMarket
       
       get '/' do
         if ENV['RAILS_ENV'] == 'development'
-          [{:id=>"15385431-toto", :imgs=>nil, :categs=>{:cat1=>"70", :cat2=>nil, :cat3=>nil}, :title=>"Programmes fait maison ", :subtitle=>"Artisanat numérique pour vos actions sur le web ", :desc=>"Automatiser vos actions sur le web. C'est mon métier. N'hésitez pas à me contacter pour ne plus vous faire de soucis avec les actions répétitives que vous faites. ", :tags=>["automatiser  ", "données  "], :materials=>["Autre", "Email"], :colors=>["Gris", "Turquoise"], :styles=>"", :events=>"", :dest=>nil, :prices=>{:prix_unitaire=>"50.00", :prix_solde=>"", :quantity=>"10"}, :deliveries=>{:delay=>"2", :profil=>"924223"}, :options=>{:reserve=>"", :date=>"0000-00-00 00"}}, {:id=>"15353631", :imgs=>nil, :categs=>{:cat1=>"70", :cat2=>nil, :cat3=>nil}, :title=>"Programmes fait maison ", :subtitle=>"Artisanat numérique pour vos actions sur le web ", :desc=>"Automatiser vos actions sur le web. C'est mon métier. N'hésitez pas à me contacter pour ne plus vous faire de soucis avec les actions répétitives que vous faites. ", :tags=>["automatiser  ", "données  "], :materials=>["Autre", "Email"], :colors=>["Gris", "Turquoise"], :styles=>"", :events=>"", :dest=>nil, :prices=>{:prix_unitaire=>"50.00", :prix_solde=>"", :quantity=>"10"}, :deliveries=>{:delay=>"2", :profil=>"924223"}, :options=>{:reserve=>"", :date=>"0000-00-00 00"}}]
+          [{:lm_id=>15485607, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485599, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485593, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485585, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485583, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485579, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485573, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485569, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485567, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485563, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485561, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485185, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485181, :title=>"Programmes fait maison ", :state=>"published"}]          
         else
           LittleMarketCreation.all
         end
       end
 
+      get '/delete' do
+        begin
+          Rails.logger.debug "Delete crea #{params[:lm_id]}"
+          LittleMarketCreation.delete params[:lm_id]
+          msg = "Creation #{params[:lm_id]} est bien supprimée de LittleMarket"
+        rescue Exception => e
+          msg = "Error : #{e}"
+          error! msg, 500          
+        end
+        { msg: msg }
+      end
     end
-
   end
 end
