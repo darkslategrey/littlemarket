@@ -24,10 +24,26 @@
         %td{"data-bind"=>'text: $data.id'}
         %td{"data-bind"=>'text: $data.title'}
         %td
-          %button.btn.btn-success.btn-xs{:type => "button"} Publier
-          %button.btn.btn-danger.btn-xs{:type => "button"} Supprimer
+          %button.btn.btn-success.btn-xs{:type => "button", 'data-toogle' => 'tooltip',
+                                         'data-placement' => 'top',
+                                         :title => 'Créer sur Little Market',
+                                         'data-bind' => 'click: $data.publish'}
+            Publier
+          %button.btn.btn-danger.btn-xs{:type => "button", 'data-toogle' => 'tooltip',
+                                        'data-placement' => 'top',
+                                        :title => 'Supprimer de Little Market',
+                                        'data-bind' => 'click: $data.delete'}
+            Supprimer
 
 
-  %button.btn.btn-success{:type => "button"} Publier la sélection
-  %button.btn.btn-danger{:type => "button"} Supprimer la sélection
+  %button.btn.btn-success{:type => "button", 'data-toogle' => 'tooltip',
+                          'data-placement' => 'top',
+                          :title => 'En cliquant vous recréez vos créations sur Little Market',
+                          'data-bind' => 'click: publishSelected'}
+    Publier la sélection
+  %button.btn.btn-danger{:type => "button", 'data-toogle' => 'tooltip',
+                         'data-placement' => 'top',
+                         :title => 'En cliquant vous supprimez vos créations de Little Market',
+                         'data-bind' => 'click: deleteSelected'}
+    Supprimer la sélection
 
