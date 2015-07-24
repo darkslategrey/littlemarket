@@ -66,7 +66,7 @@ gem 'grape'
 gem "hashie-forbidden_attributes"
 gem "knockoutjs-rails"
 
-# gem 'bower-rails'
+gem 'bower-rails'
 # gem 'polymer-rails'
 # gem 'polymer-elements-rails', '= 1.0.0-rc.1'
 

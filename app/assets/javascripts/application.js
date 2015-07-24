@@ -16,4 +16,5 @@
 //= require turbolinks
 //= require bootstrap-sprockets
 //= require knockout
+//= require noty/js/noty/jquery.noty
 //= require_tree .
