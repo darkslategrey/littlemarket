@@ -11,7 +11,7 @@ class Creation
     console.log 'delete ' + this.lm_id
     self = this
     $.getJSON '/api/creations/delete?id=' + this.lm_id, ->
-      console.log "deleted this creationn. Others comming.'
+      console.log "deleted this creationn. Others comming."
     #   self.state = 'deleted'
       
   publish: ->
