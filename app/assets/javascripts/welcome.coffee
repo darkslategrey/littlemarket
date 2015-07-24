@@ -18,12 +18,30 @@ class Creation
     ajax_call.done @ajax_done
     ajax_call.fail @ajax_fail
 
-  ajax_done: ->
+  ajax_done: (response) ->
     console.log "ajax done"
 
-  ajax_fail: ->
-    console.log "ajax fail"
-      
+  ajax_fail: (response) ->
+    err = ko.toJS(response)
+
+    noty
+      text: 'Echec: ' + err.responseJSON.error
+      layout: 'top'
+      theme: 'relax'
+
+      type: 'error'
+      maxVisible: 1
+      timeout: 1
+      closeWith: ['click', 'hover', 'backdrop']
+      dismissQueue: false
+      animation: 
+          open: 'animated bounceInLeft', # Animate.css class names
+          close: 'animated bounceOutLeft', # Animate.css class names
+          easing: 'swing', # unavailable - no need
+          speed: 500 # unavailable - no need
+
+
+    console.log "ajax fail " + err['status']
       
   publish: ->
     console.log 'publish' + this.lm_id

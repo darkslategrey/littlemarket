@@ -46,7 +46,7 @@ module LittleMarket
           msg = "Creation #{params[:lm_id]} est bien supprimée de LittleMarket"
         rescue Exception => e
           msg = "Error : #{e}"
-          error! msg, 500          
+          error! msg, 500      
         end
         { msg: msg }
       end
