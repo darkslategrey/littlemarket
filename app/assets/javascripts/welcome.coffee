@@ -14,17 +14,21 @@ class Creation
   delete: ->
     console.log 'delete ' + this.lm_id
     @state('deleted')
-    
-    # $.getJSON '/api/creations/delete?id=' + this.lm_id, ->
-    #   console.log "deleted this creationn. Others comming."
-    #   self.state = 'deleted'
+    ajax_call = $.ajax('/api/creations/delete?id=' + @lm_id)
+    ajax_call.done @ajax_done
+    ajax_call.fail @ajax_fail
+
+  ajax_done: ->
+    console.log "ajax done"
+
+  ajax_fail: ->
+    console.log "ajax fail"
+      
       
   publish: ->
     console.log 'publish' + this.lm_id
     @state('published')
-    # $.getJSON '/api/creations/publish?id=' + this.lm_id,  ->
-    #   self.state = 'published'
-      
+    
 class CreationsList
 
   constructor: ->
