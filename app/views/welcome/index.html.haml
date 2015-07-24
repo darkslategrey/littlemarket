@@ -16,6 +16,8 @@
         %th
           Titre
         %th
+          State
+        %th
           Actions
     %tbody{"data-bind"=>'foreach: items'}
       %tr
@@ -23,17 +25,16 @@
           %input{:type => 'checkbox', 'data-bind' => 'checked: $data.checked'}
         %td{"data-bind"=>'text: $data.lm_id'}
         %td{"data-bind"=>'text: $data.title'}
+        %td{"data-bind"=>'text: $data.state()'}            
         %td
-          %div{'data-bind' => 'if: $data.state == "deleted"'}
-            %button.btn.btn-success.btn-xs{:type => "button", 'data-toogle' => 'tooltip',
-                                           'data-placement' => 'top',
-                                           :title => 'Créer sur Little Market',
-                                           'data-bind' => 'click: $data.publish'} Publier
-          %div{'data-bind' => 'if: $data.state == "published"'}
-            %button.btn.btn-danger.btn-xs{:type => "button", 'data-toogle' => 'tooltip',
+          %button.btn.btn-danger.btn-xs{:type => "button", 'data-toogle' => 'tooltip',
                                         'data-placement' => 'top',
                                         :title => 'Supprimer de Little Market',
-                                        'data-bind' => 'click: $data.delete'} Supprimer
+                                        'data-bind' => 'visible: $data.state() == "published", click: $data.delete'} Supprimer
+          %button.btn.btn-success.btn-xs{:type => "button", 'data-toogle' => 'tooltip',
+                                        'data-placement' => 'top',
+                                        :title => 'Publier sur Little Market',
+                                        'data-bind' => 'visible: $data.state() == "deleted", click: $data.publish'} Publier
 
 
 

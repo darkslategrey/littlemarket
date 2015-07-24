@@ -6,24 +6,25 @@
 class Creation
   constructor: (@lm_id, @title, @state) ->
     @checked = ko.observable false
+    @state   = ko.observable @state
+    
+  published: ->
+    return @state() == 'published'
 
   delete: ->
     console.log 'delete ' + this.lm_id
-    self = this
-    $.getJSON '/api/creations/delete?id=' + this.lm_id, ->
-      console.log "deleted this creationn. Others comming."
+    @state('deleted')
+    
+    # $.getJSON '/api/creations/delete?id=' + this.lm_id, ->
+    #   console.log "deleted this creationn. Others comming."
     #   self.state = 'deleted'
       
   publish: ->
     console.log 'publish' + this.lm_id
-    self = this
-    $.getJSON '/api/creations/publish?id=' + this.lm_id,  ->
-      self.state = 'published'
+    @state('published')
+    # $.getJSON '/api/creations/publish?id=' + this.lm_id,  ->
+    #   self.state = 'published'
       
-      
-
-
-
 class CreationsList
 
   constructor: ->
