@@ -32,23 +32,39 @@ module LittleMarket
       default_format :json
       
       get '/' do
-        if ENV['RAILS_ENV'] == 'development'
+        if false # ENV['RAILS_ENV'] == 'development'
           [{:lm_id=>15485607, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485599, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485593, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485585, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485583, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485579, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485573, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485569, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485567, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485563, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485561, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485185, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485181, :title=>"Programmes fait maison ", :state=>"published"}]          
         else
           LittleMarketCreation.all
         end
       end
 
+      get 'publish' do
+        begin
+          creation = Creation.find_by_lm_id params[:lm_id]          
+          Rails.logger.debug "Publish crea #{creation.lm_id}"
+          LittleMarketCreation.publish creation
+          msg = "Votre creation '#{creation.title}' (#{creation.lm_id}) à bien été publiée sur LittleMarket"
+        rescue Exception => e
+          msg = "Error : #{e}"
+          Rails.logger.error msg + e.backtrace.join("\n")
+          error!({ msg: msg, title: creation.title }, 500)
+        end
+      end
+
+      
       get '/delete' do
         begin
           Rails.logger.debug "Delete crea #{params[:lm_id]}"
           LittleMarketCreation.delete params[:lm_id]
-          msg = "Creation #{params[:lm_id]} est bien supprimée de LittleMarket"
+          creation = Creation.find_by_lm_id params[:lm_id]
+          msg = "Votre creation '#{creation.title}' (#{params[:lm_id]}} à bien été supprimée de LittleMarket"
         rescue Exception => e
           msg = "Error : #{e}"
-          error! msg, 500      
+          Rails.logger.error msg + e.backtrace.join("\n")
+          error!({ msg: msg, title: params[:title] }, 500)
         end
-        { msg: msg }
+        { msg: msg, title: params[:title] }
       end
     end
   end

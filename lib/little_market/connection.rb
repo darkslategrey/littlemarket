@@ -51,6 +51,10 @@ module LittleMarket
 
     end
 
+    def publish creation
+      @connector.publish creation
+    end
+    
     def delete_creation id
       @connector.delete_creation id
     end

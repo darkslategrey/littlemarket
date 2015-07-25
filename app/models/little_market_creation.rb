@@ -14,6 +14,15 @@ class LittleMarketCreation
       raise e
     end
   end
+
+  def self.publish id
+    begin
+      creation = BROWSER.publish id
+      creation.update_attributes! state: 'published'
+    rescue Exception => e
+      raise e
+    end
+  end
   
   def self.all
 

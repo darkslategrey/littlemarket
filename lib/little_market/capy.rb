@@ -1,3 +1,4 @@
+# coding: utf-8
 
 
 module LittleMarket
@@ -37,6 +38,22 @@ module LittleMarket
         @@browser.html
       end
 
+      def self.publish creation
+
+        # Capybara.app_host = 'http://www.alittlemarket.com'
+        # path = '/page/creation/add.php?action=add'
+        # @@browser.visit path
+
+        # categ, form_ssncateg, from_ncateg3_ss = creation.categs.split ','
+        # !categ.blank?           && @@browser.select categ,           from: 'categ'
+        # !form_ssncateg.blank?   && @@browser.select form_ssncateg,   from: 'form_ssncateg'
+        # !form_ncateg3_ss.blank? && @@browser.select form_ncateg3_ss, from: 'form_ncateg3_ss'
+
+        # @@browser.fill_in 'titre', creation.title
+        # @@browser.fill_in 'texte', creation.desc
+        
+      end
+      
       def self.delete_creation id
         Capybara.app_host = 'http://www.alittlemarket.com'
         path = '/page/creation/list_action.php?action=delete&page=1&page_en_cours=1'

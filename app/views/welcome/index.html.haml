@@ -37,7 +37,9 @@
                                         'data-bind' => 'visible: $data.state() == "deleted", click: $data.publish'} Publier
 
 
-
+  .well{ 'data-bind' => 'visible: total() == 0'}
+    Aucune créations présentes sur LM
+              
   %button.btn.btn-success{:type => "button", 'data-toogle' => 'tooltip',
                           'data-placement' => 'top',
                           :title => 'En cliquant vous recréez vos créations sur Little Market',
