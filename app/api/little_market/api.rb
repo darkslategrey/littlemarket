@@ -32,12 +32,20 @@ module LittleMarket
       default_format :json
       
       get '/' do
-        if false # ENV['RAILS_ENV'] == 'development'
-          [{:lm_id=>15485607, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485599, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485593, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485585, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485583, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485579, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485573, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485569, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485567, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485563, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485561, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485185, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485181, :title=>"Programmes fait maison ", :state=>"published"}]          
-        else
-          LittleMarketCreation.all
+        if ENV['RAILS_ENV'] == 'development'
+          creations = LittleMarketCreation.all
+          Rails.logger.debug "Creations size #{creations.size}"
+          creations
         end
+        # { [] }
       end
+
+        
+      #     [{:lm_id=>15485607, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485599, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485593, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485585, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485583, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485579, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485573, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485569, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485567, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485563, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485561, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485185, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485181, :title=>"Programmes fait maison ", :state=>"published"}]          
+      #   else
+      #     LittleMarketCreation.all
+      #   end
+      # end
 
       get 'publish' do
         begin

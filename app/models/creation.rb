@@ -35,5 +35,27 @@ class Creation < ActiveRecord::Base
     end
     creation
   end
-  
+
+  def to_new_form
+    categ, form_ssncateg, form_ncateg3_ss    = categs.split ','    
+    delai, profile                           = deliveries.split ','
+    prix, sell_prix_promo, qte               = prices.split ','
+    pseudo_membre_reservation, mise_en_ligne = options.split ','
+
+    form =     { 'categ' => categ, 'form_ssncateg' => form_ssncateg, 'form_ncateg3_ss' => form_ncateg3_ss }
+
+    form.merge!({ 'delai'        => delai, 'profile' => profile })
+    form.merge!({ 'prix'         => prix, 'sell_prix_promo' => sell_prix_promo, 'qte' => qte })
+    form.merge!({ 'motclef[]'    => tags.split(',') })    
+    form.merge!({ 'colors[]'     => Color.find_by_names(colors) })
+    form.merge!({ 'destinataire' => dest })
+    form.merge!({ 'matieres[]'   => materials.split(',') })
+    form.merge!({ 'occasion'     => events })
+    form.merge!({ 'styles'       => styles })
+    form.merge!({ 'subtitle'     => subtitle })
+    form.merge!({ 'texte'        => desc })
+    form.merge!({ 'titre'        => title })
+    form.merge!({ 'pseudo_membre_reservation' => pseudo_membre_reservation, 'mise_en_ligne' => mise_en_ligne }) 
+  end
+
 end

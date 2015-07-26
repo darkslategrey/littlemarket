@@ -27,19 +27,27 @@ class LittleMarketCreation
   def self.all
 
     begin
-      html      = BROWSER.creations_list CREAPATH
-      creations = LittleMarket::Parser.creation_urls(html).map do |url|
-        params  = LittleMarket::Parser.creation BROWSER.creation(url)
-        creation= Creation.createFromLM params
+      html        = BROWSER.creations_list CREAPATH
+      # remote creations
+      creations   = LittleMarket::Parser.creation_urls(html).map do |url|
+        params    = LittleMarket::Parser.creation BROWSER.creation(url)
+        creation  = Creation.createFromLM params
         { lm_id: creation.lm_id, title: creation.title, state: creation.state }
       end
+      crea_set          = Set.new creations
+
+      # locale creations
+      creations_locales = Creation.all.map do |crea|
+        { lm_id: crea.lm_id, title: crea.title, state: crea.state }
+      end
+      crea_set.merge(Set.new(creations_locales)).to_a
     rescue LittleMarket::ParseError => e
       raise "LittleMarketCreation.all error: #{e}"
     end
-    Rails.logger.debug "CREATIONS: #{creations}"
-    creations
   end
 
-  
 
 end
+
+
+
