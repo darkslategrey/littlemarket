@@ -45,11 +45,17 @@ module LittleMarket
       cat1 = @html.xpath('//select[@id="categ"]//option[@selected="selected"]')
       cat1 = cat1.empty? ? nil : cat1.first.attr('value')
 
-      cat2 = @html.xpath('//select[@id="form_ssncateg"]//option[@selected="selected"]')
-      cat2 = cat2.empty? ? nil : cat2.first.attr('value')
+      cat2 = ''
+      options = @html.xpath('//select[@id="form_ssncateg"]').first
+      options.children.each do |c| cat2 = c.attr('value') if c.has_attribute?('selected') end
+      
+      # cat2 = @html.xpath('//select[@id="form_ssncateg"]//option[@selected=""]')
+      # cat2 = cat2.empty? ? nil : cat2.first.attr('value')
 
       cat3 = @html.xpath('//select[@id="form_ncateg3_ss"]//option[@selected="selected"]')
       cat3 = cat3.empty? ? nil : cat3.first.attr('value')
+
+      Rails.logger.debug "DEBUG cat1 '#{cat1}' / cat2 '#{cat2}' / cat3 '#{cat3}'"
 
       { cat1: cat1, cat2: cat2, cat3: cat3 }
       

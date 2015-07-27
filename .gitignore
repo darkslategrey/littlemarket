@@ -17,3 +17,6 @@
 /tmp
 
 /bin/phantomjs*
+
+spec/fixtures/*.htm
+spec/fixtures/*_files

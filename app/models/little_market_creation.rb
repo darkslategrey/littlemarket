@@ -17,7 +17,7 @@ class LittleMarketCreation
 
   def self.publish creation
     begin
-      creation = BROWSER.publish creation
+      BROWSER.publish creation
       creation.update_attributes! state: 'published'
     rescue Exception => e
       raise e

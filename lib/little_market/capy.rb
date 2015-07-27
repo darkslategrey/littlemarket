@@ -10,7 +10,8 @@ module LittleMarket
     class Capy
 
       @@browser  = Capybara::Session.new :poltergeist
-
+      @@cpt      = 0
+      
       @@new_form = {
         '_action'=>'Form1',
         'actionHide'=>'continuer',
@@ -52,7 +53,17 @@ module LittleMarket
 
       def self.get_creation url
         @@browser.visit url
-        @@browser.html
+        ccpt = 0
+        while ccpt < 10
+          break if @@browser.has_xpath?('//select[@id="form_ssncateg"]')
+          sleep 2
+          ccpt += 1
+        end
+        html = @@browser.html        
+        File.open("/tmp/html_1_#{@@cpt}.html", 'w') { |file| file.write(html) }
+        @@cpt += 1
+        # find(:xpath, "//table/tr").click                
+        html
       end
       
       def self.get_creations_list path
@@ -99,11 +110,17 @@ module LittleMarket
         end
         Rails.logger.debug resp.body
         nokodoc = Nokogiri::HTML(resp.body)
-        xpath   = '//table[@id="creation"]/tr[2]/td[4]/span[2]'
+        nokodoc.xpath('//li[@class="errors"]').each do |error|
+          Rails.logger.error "PUBLISH ERROR '#{error.text}" 
+        end
+        xpath = '/html/body/div[2]/div/div[3]/div[1]/form/table/tbody/tr[2]/td[4]/span[2]'
+
+        # xpath   = '//table[@id="creation"]/tr[2]/td[4]/span[2]'
         Rails.logger.debug "NOKODOC #{nokodoc.xpath(xpath).count}"
         new_id  = nokodoc.xpath(xpath).first.text.split(':')[1]
+        Rails.logger.debug "NEW ID #{new_id}"        
         creation.update_attributes! lm_id: new_id
-        resp
+        # resp
       end
       
       def self.delete_creation id
