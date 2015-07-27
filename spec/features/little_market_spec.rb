@@ -7,7 +7,7 @@ require 'rails_helper'
 RSpec.describe "little market", :type => :feature do 
 
   context "ids verifications" do 
-    it 'must display display error when cannot connect to little market' do
+    xit 'must display display error when cannot connect to little market' do
       visit "/user/register"
       fill_in "user[username]", :with => "lucien.farstein@gmail.com"
       fill_in "user[password]", :with => "toto55550"
@@ -16,7 +16,7 @@ RSpec.describe "little market", :type => :feature do
       expect(page).to have_content 'pas reconnus'
     end 
 
-    it 'must display welcome#index with correct ids' do 
+    xit 'must display welcome#index with correct ids' do 
       visit "/user/register"
       fill_in "user[username]", :with => "lucien.farstein@gmail.com"
       fill_in "user[password]", :with => "toto555500"
@@ -27,17 +27,18 @@ RSpec.describe "little market", :type => :feature do
 
   end
 
-  # context "when user is logged in and identified by LM" do
+  context "when user is logged in and identified by LM" do
+    let(:username) { "lucien.farstein@gmail.com" }
+    let(:password) { "toto555500" }
 
-  #   xit "must show creations on the welcome#index page" do
-  #     visit "/user/login"
-  #     fill_in "user[username]", :with => "lucien.farstein@gmail.com"
-  #     fill_in "user[password]", :with => "toto555500"
-  #     click_button "Se connecter"
-  #     expect(page).to have_xpath '//table/tr' 
-  #   end
+    it "must show creations on the welcome#index page" do
+      User.create! username: username, password: password
+      visit "/user/login"
+      fill_in "user[username]", :with => username
+      fill_in "user[password]", :with => password
+      click_button "Se connecter"
+      expect(page.body).to match /Aucune créations/
+    end
     
-  # end
-
-
+  end
 end

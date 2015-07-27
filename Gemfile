@@ -50,11 +50,13 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'simplecov', :require => false
   # gem 'airborne', :require => false
-  gem 'webmock'
+
   gem 'rest-client'
   gem 'vcr'
   gem 'jasmine-rails'
 end
+
+gem 'webmock', :group => :test
 
 gem 'pry-rails'
 gem 'poltergeist'
@@ -70,3 +72,6 @@ gem 'bower-rails'
 # gem 'polymer-rails'
 # gem 'polymer-elements-rails', '= 1.0.0-rc.1'
 
+gem 'faraday'
+gem 'faraday-cookie_jar'
+gem 'faraday_middleware'

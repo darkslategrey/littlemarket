@@ -17,36 +17,34 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 require 'capybara/rspec'
-require 'webmock/rspec'
+# require 'webmock/rspec'
 
 RSpec.configure do |config|
-
   config.before(:each) do
 
-    stub_request(:get, "http://www.littlemarket.com/").
-      with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'User-Agent'=>'Ruby'}).
-      to_return(:status => 200, :body => "", :headers => {})
+    # stub_request(:get, "http://www.littlemarket.com/").
+    #   with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'User-Agent'=>'Ruby'}).
+    #   to_return(:status => 200, :body => "", :headers => {})
 
-    stub_request(:get, "http://www.littlemarket.com/api/creations").
-      with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'User-Agent'=>'Ruby'}).
-      to_return(:status => 200, :body => IO.read('spec/fixtures/mes_creations.htm'), :headers => {})
+    # stub_request(:get, "http://www.littlemarket.com/api/creations").
+    #   with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'User-Agent'=>'Ruby'}).
+    #   to_return(:status => 200, :body => IO.read('spec/fixtures/mes_creations.htm'), :headers => {})
 
-    stub_request(:get, "http://www.littlemarket.com/page/creation/list.php").
-      with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'User-Agent'=>'Ruby'}).
-      to_return(:status => 200, :body => IO.read('spec/fixtures/mes_creations.htm'), :headers => {})
+    # stub_request(:get, "http://www.littlemarket.com/page/creation/list.php").
+    #   with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'User-Agent'=>'Ruby'}).
+    #   to_return(:status => 200, :body => IO.read('spec/fixtures/mes_creations.htm'), :headers => {})
 
 
-    stub_request(:get, /.*add.php.*/).
-      with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'User-Agent'=>'Ruby'}).
-      to_return(:status => 200, :body => IO.read('spec/fixtures/crea_edit_page.htm'), :headers => {})
+    # stub_request(:get, /.*add.php.*/).
+    #   with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'User-Agent'=>'Ruby'}).
+    #   to_return(:status => 200, :body => IO.read('spec/fixtures/crea_edit_page.htm'), :headers => {})
     
-    stub_request(:get, /.*action=delete.*/).
-      with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'User-Agent'=>'Ruby'}).
-      to_return(:status => 200, :body => 'deleted', :headers => {})
-    
-    
-    
+    # stub_request(:get, /.*action=delete.*/).
+    #   with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'User-Agent'=>'Ruby'}).
+    #   to_return(:status => 200, :body => 'deleted', :headers => {})
   end
+  
+
   
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
@@ -110,8 +108,8 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
-# The settings below are suggested to provide a good initial experience
-# with RSpec, but feel free to customize to your heart's content.
+  # The settings below are suggested to provide a good initial experience
+  # with RSpec, but feel free to customize to your heart's content.
 =begin
   # These two settings work together to allow you to limit a spec run
   # to individual examples or groups you care about by tagging them with
@@ -120,7 +118,7 @@ RSpec.configure do |config|
   config.filter_run :focus
   config.run_all_when_everything_filtered = true
 
-  # Limits the available syntax to the non-monkey patched syntax that is
+  # Limits the available syntax to thep non-monkey patched syntax that is
   # recommended. For more details, see:
   #   - http://myronmars.to/n/dev-blog/2012/06/rspecs-new-expectation-syntax
   #   - http://teaisaweso.me/blog/2013/05/27/rspecs-new-message-expectation-syntax/

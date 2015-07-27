@@ -44,18 +44,24 @@ class Creation < ActiveRecord::Base
 
     form =     { 'categ' => categ, 'form_ssncateg' => form_ssncateg, 'form_ncateg3_ss' => form_ncateg3_ss }
 
-    form.merge!({ 'delai'        => delai, 'profile' => profile })
+    form.merge!({ 'delai'        => delai, 'profil' => profile })
     form.merge!({ 'prix'         => prix, 'sell_prix_promo' => sell_prix_promo, 'qte' => qte })
-    form.merge!({ 'motclef[]'    => tags.split(',') })    
-    form.merge!({ 'colors[]'     => Color.find_by_names(colors) })
     form.merge!({ 'destinataire' => dest })
-    form.merge!({ 'matieres[]'   => materials.split(',') })
     form.merge!({ 'occasion'     => events })
     form.merge!({ 'styles'       => styles })
     form.merge!({ 'subtitle'     => subtitle })
     form.merge!({ 'texte'        => desc })
     form.merge!({ 'titre'        => title })
-    form.merge!({ 'pseudo_membre_reservation' => pseudo_membre_reservation, 'mise_en_ligne' => mise_en_ligne }) 
+    form.merge!({ 'pseudo_membre_reservation' => pseudo_membre_reservation, 'mise_en_ligne' => mise_en_ligne })
+
+    tags_str      = tags.split(',').map             { |t| "motclef[]=#{t.strip}" }.join '&'
+    colors_str    = Color.find_by_names(colors).map { |c| "colors[]=#{c}" }.join '&'
+    materials_str = materials.split(',').map do |m|
+      "matieres[]=#{Material.find_by_value(m).name}"
+    end.join '&'
+    # materials_str = materials.split(',').map        { |m| "matieres[]=#{m.strip}" }.join '&'
+    "#{form.to_param}&#{tags_str}&#{colors_str}&#{materials_str}"
+    
   end
 
 end

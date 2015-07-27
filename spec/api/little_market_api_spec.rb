@@ -15,7 +15,6 @@ describe LittleMarket::API, type: :feature do
 
       it 'must delete the creation from LM' do
         visit '/api/creations/delete?lm_id=10'
-        # http://www.alittlemarket.com/page/creation/list_action.php?action=delete&page=1&sell_id=15353631&page_en_cours=1
         expect(page.status_code).to eq 200
       end
       

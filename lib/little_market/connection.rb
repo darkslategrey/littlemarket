@@ -33,12 +33,15 @@ module LittleMarket
     end
     
     def login params
+      Rails.logger.debug "PARALS #{params}"
       begin
         login_params = {
           username:  params.fetch(:username, @username),
           password:  params.fetch(:password, @password),
         }
         connector = params.fetch(:connector, @connector)
+        @connector = connector
+        Rails.logger.debug "CONNECTOR #{connector}"
         connector.login login_params
         @@connected = connector.connected?
       rescue Exception => e

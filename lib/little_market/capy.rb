@@ -64,22 +64,46 @@ module LittleMarket
 
       def self.publish creation
 
-        Rails.logger.debug "Ces putains de cookies : #{@@browser.page.driver.cookies}"
-        
-        # form_to_post = @@new_form.merge! creation.to_new_form
-        # Rails.logger.debug "form_to_post : <#{form_to_post}>"
-        # Capybara.app_host = 'http://www.alittlemarket.com'
-        # path = '/page/creation/add.php?action=add'
-        # @@browser.visit path
+        cookie  = @@browser.driver.cookies['sessid']
+        cookies = []
+        @@browser.driver.cookies.each_key do |k|
+          Rails.logger.debug "#{@@browser.driver.cookies[k].name}=#{@@browser.driver.cookies[k].value}"
+          cookies << "#{@@browser.driver.cookies[k].name}=#{@@browser.driver.cookies[k].value}"
+        end
+        cookies = cookies.join ';'
 
-        # categ, form_ssncateg, from_ncateg3_ss = creation.categs.split ','
-        # !categ.blank?           && @@browser.select categ,           from: 'categ'
-        # !form_ssncateg.blank?   && @@browser.select form_ssncateg,   from: 'form_ssncateg'
-        # !form_ncateg3_ss.blank? && @@browser.select form_ncateg3_ss, from: 'form_ncateg3_ss'
-
-        # @@browser.fill_in 'titre', creation.title
-        # @@browser.fill_in 'texte', creation.desc
+        Rails.logger.debug "COOKIES #{cookies}"
         
+        session = {}
+        
+        [:domain, :path, :secure?, :httponly?, :expires].each do |p|
+          session[p] = cookie.send p
+        end
+        session_cookie = HTTP::Cookie.new(cookie.name, cookie.value, session)
+        # Rails.logger.debug "methods " + session_cookie.methods.sort.join("\n")
+        # Rails.logger.debug "cookie value #{session_cookie.set_cookie_value}"
+        # Rails.logger.debug "Ces putains de cookies : #{session}"
+        url = 'http://www.alittlemarket.com'
+        conn = Faraday.new(:url => url) do |faraday|
+          faraday.request  :url_encoded
+          faraday.response :logger
+          faraday.use FaradayMiddleware::FollowRedirects, limit: 3
+          faraday.use :cookie_jar # , jar: session_cookie
+          faraday.adapter  Faraday.default_adapter
+        end
+        post_data = @@new_form.to_param + '&' + creation.to_new_form
+        Rails.logger.debug "POST DATA #{post_data}"
+        resp = conn.post('/page/creation/add.php?action=add') do |request|
+          request.headers.merge!({ :Cookie => cookies }) # session_cookie.set_cookie_value})
+          request.body = post_data
+        end
+        Rails.logger.debug resp.body
+        nokodoc = Nokogiri::HTML(resp.body)
+        xpath   = '//table[@id="creation"]/tr[2]/td[4]/span[2]'
+        Rails.logger.debug "NOKODOC #{nokodoc.xpath(xpath).count}"
+        new_id  = nokodoc.xpath(xpath).first.text.split(':')[1]
+        creation.update_attributes! lm_id: new_id
+        resp
       end
       
       def self.delete_creation id
