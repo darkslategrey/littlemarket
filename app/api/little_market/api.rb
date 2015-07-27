@@ -33,26 +33,26 @@ module LittleMarket
       
       get '/' do
         if ENV['RAILS_ENV'] == 'development'
+          [{:lmid=>15485607, :title=>"Programmes fait maison ", :state=>"published"}, {:lmid=>15485599, :title=>"Programmes fait maison ", :state=>"published"}, {:lmid=>15485593, :title=>"Programmes fait maison ", :state=>"published"}, {:lmid=>15485585, :title=>"Programmes fait maison ", :state=>"published"}, {:lmid=>15485583, :title=>"Programmes fait maison ", :state=>"published"}, {:lmid=>15485579, :title=>"Programmes fait maison ", :state=>"published"}, {:lmid=>15485573, :title=>"Programmes fait maison ", :state=>"published"}, {:lmid=>15485569, :title=>"Programmes fait maison ", :state=>"published"}, {:lmid=>15485567, :title=>"Programmes fait maison ", :state=>"published"}, {:lmid=>15485563, :title=>"Programmes fait maison ", :state=>"published"}, {:lmid=>15485561, :title=>"Programmes fait maison ", :state=>"published"}, {:lmid=>15485185, :title=>"Programmes fait maison ", :state=>"published"}, {:lmid=>15485181, :title=>"Programmes fait maison ", :state=>"published"}]          
+        else
           creations = LittleMarketCreation.all
           Rails.logger.debug "Creations size #{creations.size}"
           creations
-        end
-        # { [] }
+        end        
       end
-
-        
-      #     [{:lm_id=>15485607, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485599, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485593, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485585, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485583, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485579, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485573, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485569, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485567, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485563, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485561, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485185, :title=>"Programmes fait maison ", :state=>"published"}, {:lm_id=>15485181, :title=>"Programmes fait maison ", :state=>"published"}]          
-      #   else
-      #     LittleMarketCreation.all
-      #   end
-      # end
 
       get 'publish' do
         begin
-          creation = Creation.find_by_lm_id params[:lm_id]          
-          Rails.logger.debug "Publish crea #{creation.lm_id}"
-          LittleMarketCreation.publish creation
-          msg = "Votre creation '#{creation.title}' (#{creation.lm_id}) à bien été publiée sur LittleMarket"
+          if ENV['RAILS_ENV'] == 'development'
+            { msg: msg, lmid: 12 }
+          else
+            creation = Creation.find_by_lmid params[:lmid]          
+            Rails.logger.debug "Publish crea #{creation.lmid}"
+            LittleMarketCreation.publish creation
+            msg = "Votre creation '#{creation.title}' (#{creation.lmid}) "
+            msg += "à bien été publiée sur LittleMarket"
+            { msg: msg, lmid: creation.lmid }
+          end
         rescue Exception => e
           msg = "Error : #{e}"
           Rails.logger.error msg + e.backtrace.join("\n")
@@ -63,10 +63,16 @@ module LittleMarket
       
       get '/delete' do
         begin
-          Rails.logger.debug "Delete crea #{params[:lm_id]}"
-          LittleMarketCreation.delete params[:lm_id]
-          creation = Creation.find_by_lm_id params[:lm_id]
-          msg = "Votre creation '#{creation.title}' (#{params[:lm_id]}} à bien été supprimée de LittleMarket"
+          if ENV['RAILS_ENV'] == 'development'
+            msg = "suppression de params[:lmid]"
+            { msg: msg }
+          else
+            Rails.logger.debug "Delete crea #{params[:lmid]}"
+            LittleMarketCreation.delete params[:lmid]
+            creation = Creation.find_by_lmid params[:lmid]
+            msg = "Votre creation '#{creation.title}' (#{params[:lmid]}} "
+            msg += "à bien été supprimée de LittleMarket"
+          end
         rescue Exception => e
           msg = "Error : #{e}"
           Rails.logger.error msg + e.backtrace.join("\n")

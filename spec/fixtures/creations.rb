@@ -3,7 +3,7 @@ class LittleMarketFixtures
 
   @@creations = [
     {
-      "lm_id"=>"15385431",
+      "lmid"=>"15385431",
       "imgs"=>nil,
       "categs"=>{"cat1"=>"70", "cat2"=>"70NUMERIC", "cat3"=>nil},
       "title"=>"Programmes fait maison ",
@@ -20,7 +20,7 @@ class LittleMarketFixtures
       "deliveries"=>{"delay"=>"2", "profil"=>"924223"},
       "options"=>{"reserve"=>nil, "date"=>"0000-00-00 00"}},
     {
-      "lm_id"=>"15385431",
+      "lmid"=>"15385431",
       "imgs"=>nil,
       "categs"=>{"cat1"=>"70", "cat2"=>"70NUMERIC", "cat3"=>nil},
       "title"=>"Programmes fait maison ",

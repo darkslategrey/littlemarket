@@ -38,7 +38,7 @@ RSpec.describe Creation, type: :model do
       creation_2 = Creation.createFromLM creationLM, force: true
       expect(Creation.all.count).to eq 1
       expect(creation_2.colors).to eq 'Bleu,Vert'
-      expect(creation_1.lm_id).to eq creation_2.lm_id
+      expect(creation_1.lmid).to eq creation_2.lmid
     end
   end
 

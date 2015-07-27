@@ -16,14 +16,14 @@
         %th
           Titre
         %th
-          State
+          Publiée / Supprimée
         %th
           Actions
     %tbody{"data-bind"=>'foreach: items'}
       %tr
         %td
           %input{:type => 'checkbox', 'data-bind' => 'checked: $data.checked'}
-        %td{"data-bind"=>'text: $data.lm_id'}
+        %td{"data-bind"=>'text: $data.lmid'}
         %td{"data-bind"=>'text: $data.title'}
         %td{"data-bind"=>'text: $data.state()'}            
         %td

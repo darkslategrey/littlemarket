@@ -25,13 +25,13 @@ class Creation < ActiveRecord::Base
   end
 
   def self.upsertFromLM params, force
-    creation = Creation.find_by_lm_id(params[:lm_id])
+    creation = Creation.find_by_lmid(params[:lmid])
     if creation.nil?
       creation = Creation.create! params      
     elsif force
       creation.update! params
     # else
-    #   raise ActiveRecord::ActiveRecordError.new("creation allready exists: #{params['lm_id']}")
+    #   raise ActiveRecord::ActiveRecordError.new("creation allready exists: #{params['lmid']}")
     end
     creation
   end

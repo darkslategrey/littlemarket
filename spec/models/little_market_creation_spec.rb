@@ -26,7 +26,7 @@ RSpec.describe LittleMarketCreation, type: :model do
 
     xit 'should return a correct form to send' do
       params = {
-        "lm_id"=>15501605,
+        "lmid"=>15501605,
         "imgs"=>nil,
         "categs"=>"70,,",
         "title"=>"Programmes artisanaux locaux de la région de Silicon Sentier ",

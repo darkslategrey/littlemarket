@@ -14,7 +14,7 @@ describe LittleMarket::API, type: :feature do
     describe 'GET /api/creations/delete' do
 
       it 'must delete the creation from LM' do
-        visit '/api/creations/delete?lm_id=10'
+        visit '/api/creations/delete?lmid=10'
         expect(page.status_code).to eq 200
       end
       

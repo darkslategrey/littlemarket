@@ -27,9 +27,9 @@ describe LittleMarket::Connector::Capy do
       params[:connector] = LittleMarket::Connector::Capy
       BROWSER.login params
 
-      puts "avant #{@creation.lm_id}"
+      puts "avant #{@creation.lmid}"
       resp = BROWSER.publish @creation
-      puts "apres #{@creation.lm_id}"      
+      puts "apres #{@creation.lmid}"      
       # puts resp.body
     end
     

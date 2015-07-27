@@ -4,21 +4,23 @@
 
   
 class Creation
-  constructor: (@lm_id, @title, @state) ->
+  constructor: (@lmid, @title, @state) ->
     @checked = ko.observable false
     @state   = ko.observable @state
+    @lmid   = ko.observable @lmid
     
   published: ->
     return @state() == 'published'
 
   delete: ->
-    console.log 'delete ' + this.lm_id
+    console.log 'delete ' + this.lmid
     $.ajax
-      url:'/api/creations/delete?lm_id=' + @lm_id + '&title=' + @title
+      url:'/api/creations/delete?lmid=' + @lmid + '&title=' + @title
       success: ((response) ->
-        console.log response
-        toastr.success "" + response.msg, "Succès"
+        console.log "new lmid " + response.lmid
+        toastr.success "" + response.msg + " " + response.lmid, "Succès"
         console.log "ajax done"
+        @lmid(response.lmid)
         @state('deleted')).bind(this)
       error: ((response) ->
         err = ko.toJS(response)
@@ -26,9 +28,9 @@ class Creation
         console.log "ajax fail " + err['status']).bind(this)
       
   publish: ->
-    console.log 'publish' + this.lm_id
+    console.log 'publish' + this.lmid
     $.ajax
-      url:'/api/creations/publish?lm_id=' + @lm_id + '&title=' + @title
+      url:'/api/creations/publish?lmid=' + @lmid + '&title=' + @title
       success: ((response) ->
         console.log response
         toastr.success "" + response.msg, "Succès"
@@ -52,7 +54,7 @@ class CreationsList
       this.showSpinner true
       self = this
       $.getJSON "/api/creations", (creations) ->
-        vm.items.push(new Creation(data.lm_id, data.title, data.state)) for data in creations
+        vm.items.push(new Creation(data.lmid, data.title, data.state)) for data in creations
         self.showSpinner false
         self.showTable   true
         $("button[data-toogle='tooltip']").tooltip({delay: { "show": 500, "hide": 100 }})
@@ -74,7 +76,7 @@ class CreationsList
       selected = []
       for data in @items()
         if data.checked() == true        
-          console.log "selected " + data.lm_id
+          console.log "selected " + data.lmid
           self = this
           @currentCreation(data)
           success = (response) ->
@@ -82,7 +84,7 @@ class CreationsList
             @currentCreation().checked false
             @currentCreation().state 'deleted'
             
-          $.getJSON "/api/creations/delete?lm_id=#{data.lm_id}", success
+          $.getJSON "/api/creations/delete?lmid=#{data.lmid}", success
 
 vm = new CreationsList
 

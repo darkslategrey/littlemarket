@@ -10,7 +10,7 @@ module LittleMarket
     
     def extract
       creation = {}
-      [:lm_id, :imgs, :categs, :title, :subtitle, :desc, :tags, :materials].each do |attr|
+      [:lmid, :imgs, :categs, :title, :subtitle, :desc, :tags, :materials].each do |attr|
         begin
           creation[attr] = send "get_#{attr}".to_sym
         rescue ParseError => e
@@ -27,7 +27,7 @@ module LittleMarket
       creation
     end
     
-    def get_lm_id
+    def get_lmid
       xpath = '/html/body/div[2]/div/div[3]/div[1]/div[1]/div[1]/h1/div/a[2]'
       # href ex: http://www.alittlemarket.com/sell_display.php?sell_id=15385431
       begin

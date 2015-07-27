@@ -9,7 +9,7 @@ class LittleMarketCreation
   def self.delete id
     begin
       BROWSER.delete_creation id
-      Creation.find_by_lm_id(id).update_attributes!({ state: 'deleted' })
+      Creation.find_by_lmid(id).update_attributes!({ state: 'deleted' })
     rescue Exception => e
       raise e
     end
@@ -32,13 +32,13 @@ class LittleMarketCreation
       creations   = LittleMarket::Parser.creation_urls(html).map do |url|
         params    = LittleMarket::Parser.creation BROWSER.creation(url)
         creation  = Creation.createFromLM params
-        { lm_id: creation.lm_id, title: creation.title, state: creation.state }
+        { lmid: creation.lmid, title: creation.title, state: creation.state }
       end
       crea_set          = Set.new creations
 
       # locale creations
       creations_locales = Creation.all.map do |crea|
-        { lm_id: crea.lm_id, title: crea.title, state: crea.state }
+        { lmid: crea.lmid, title: crea.title, state: crea.state }
       end
       crea_set.merge(Set.new(creations_locales)).to_a
     rescue LittleMarket::ParseError => e

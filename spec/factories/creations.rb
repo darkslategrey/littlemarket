@@ -3,7 +3,7 @@
 FactoryGirl.define do
   factory :creation do
     id 1
-    lm_id 15501605
+    lmid 15501605
     imgs ""
     categs "70,70AUTRE,"
     title "Programmes artisanaux locaux de la région de Silicon Sentier "
