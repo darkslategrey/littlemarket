@@ -108,7 +108,7 @@ module LittleMarket
           request.headers.merge!({ :Cookie => cookies }) # session_cookie.set_cookie_value})
           request.body = post_data
         end
-        Rails.logger.debug resp.body
+        # Rails.logger.debug resp.body
         nokodoc = Nokogiri::HTML(resp.body)
         nokodoc.xpath('//li[@class="errors"]').each do |error|
           Rails.logger.error "PUBLISH ERROR '#{error.text}" 

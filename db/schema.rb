@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150727002357) do
+ActiveRecord::Schema.define(version: 20150727214417) do
 
   create_table "colors", force: :cascade do |t|
     t.string   "hex"
@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 20150727002357) do
   end
 
   create_table "creations", force: :cascade do |t|
-    t.integer  "lm_id"
+    t.integer  "lmid"
     t.string   "imgs"
     t.string   "categs"
     t.string   "title"

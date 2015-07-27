@@ -13,33 +13,27 @@ class Creation
     return @state() == 'published'
 
   delete: ->
-    console.log 'delete ' + this.lmid
+    console.log 'delete ' + @lmid()
     $.ajax
-      url:'/api/creations/delete?lmid=' + @lmid + '&title=' + @title
+      url:'/api/creations/delete?lmid=' + @lmid() + '&title=' + @title
       success: ((response) ->
-        console.log "new lmid " + response.lmid
-        toastr.success "" + response.msg + " " + response.lmid, "Succès"
-        console.log "ajax done"
-        @lmid(response.lmid)
+        toastr.success "" + response.msg, "Succès"
         @state('deleted')).bind(this)
       error: ((response) ->
-        err = ko.toJS(response)
-        toastr.error "'" + err.responseJSON.title + "' n'est pas supprimé", "Echec"
-        console.log "ajax fail " + err['status']).bind(this)
+        toastr.error "'" + response.title + "' n'est pas supprimé", "Echec"
+        console.log "ajax fail ").bind(this)
       
   publish: ->
-    console.log 'publish' + this.lmid
+    console.log 'publish' + @lmid()
     $.ajax
-      url:'/api/creations/publish?lmid=' + @lmid + '&title=' + @title
+      url:'/api/creations/publish?lmid=' + @lmid()
       success: ((response) ->
-        console.log response
         toastr.success "" + response.msg, "Succès"
-        console.log "ajax done"
-        @state('deleted')).bind(this)
+        @lmid(response.lmid)
+        @state('published')).bind(this)
       error: ((response) ->
-        err = ko.toJS(response)
-        toastr.error "'" + err.responseJSON.title + "' n'à pas été publiée", "Echec"
-        console.log "ajax fail " + err['status']).bind(this)
+        toastr.error "'" + response.title + "' n'à pas été publiée", "Echec"
+        console.log "ajax fail ").bind(this)
 
     
 class CreationsList

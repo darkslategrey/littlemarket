@@ -23,7 +23,7 @@
       %tr
         %td
           %input{:type => 'checkbox', 'data-bind' => 'checked: $data.checked'}
-        %td{"data-bind"=>'text: $data.lmid'}
+        %td{"data-bind"=>'text: $data.lmid()'}
         %td{"data-bind"=>'text: $data.title'}
         %td{"data-bind"=>'text: $data.state()'}            
         %td
