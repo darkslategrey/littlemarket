@@ -113,11 +113,20 @@ module LittleMarket
         nokodoc.xpath('//li[@class="errors"]').each do |error|
           Rails.logger.error "PUBLISH ERROR '#{error.text}" 
         end
-        xpath = '/html/body/div[2]/div/div[3]/div[1]/form/table/tbody/tr[2]/td[4]/span[2]'
 
+        xpath = '//table[@id="creation"]'
+        table = nokodoc.xpath(xpath)
+        tr    = table.first.xpath('.//tr').first
+        Rails.logger.debug "TR @@@@@@@@@ #{tr.to_html}"
+        td    = tr.xpath('./td').children[1]
+        Rails.logger.debug "TD @@@@@@@@@ #{td.to_html}"
+        new_id= td.attr('value')
+        # Rails.logger.debug "LINK @@@@@@@@@@@ #{new_id}"
+        # new_id = link.split('&')[2].split('=')[1]
+        
         # xpath   = '//table[@id="creation"]/tr[2]/td[4]/span[2]'
-        Rails.logger.debug "NOKODOC #{nokodoc.xpath(xpath).count}"
-        new_id  = nokodoc.xpath(xpath).first.text.split(':')[1]
+        # Rails.logger.debug "NOKODOC #{nokodoc.xpath(xpath).count}"
+        # new_id  = nokodoc.xpath(xpath).first.text.split(':')[1]
         Rails.logger.debug "NEW ID #{new_id}"        
         creation.update_attributes! lm_id: new_id
         # resp
