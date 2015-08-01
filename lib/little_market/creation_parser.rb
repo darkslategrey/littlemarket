@@ -26,7 +26,7 @@ module LittleMarket
       end
       creation
     end
-    
+
     def get_lmid
       xpath = '/html/body/div[2]/div/div[3]/div[1]/div[1]/div[1]/h1/div/a[2]'
       # href ex: http://www.alittlemarket.com/sell_display.php?sell_id=15385431
@@ -37,8 +37,18 @@ module LittleMarket
       end
     end
 
-    # TODO: implement the LittleMarket::Parser.get_imgs 
     def get_imgs
+      imgs = []
+      @html.xpath('//img[contains(@id, "product-image")]').each do |i|
+        imgs << { id: i.attr('id').split('-')[2] }
+      end
+
+      xpath = '//a[@class="qq-upload-preview" and contains(@href, "galerie")]'
+      i = 0
+      @html.xpath(xpath).each do |e|
+        imgs[i][:url] = e.attr 'href'; i += 1
+      end
+      imgs
     end
 
     def get_categs

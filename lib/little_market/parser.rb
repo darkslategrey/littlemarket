@@ -5,6 +5,11 @@ require_relative './creations_parser'
 module LittleMarket
   class Parser
 
+    def self.imgs html
+      html = html.class == String ? Nokogiri::HTML(html) : html
+      CreationParser.new(html).get_imgs
+    end
+    
     def self.creation html
       html = html.class == String ? Nokogiri::HTML(html) : html
       CreationParser.new(html).extract

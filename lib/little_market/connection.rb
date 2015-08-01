@@ -11,6 +11,10 @@ module LittleMarket
 
     @@connected = false
     @@browser   = nil
+
+    def img url, creation_id
+      @connector.get_img url, creation_id
+    end
     
     def initialize params
       @username = params[:username]

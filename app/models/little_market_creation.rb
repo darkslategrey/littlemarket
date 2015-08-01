@@ -23,15 +23,22 @@ class LittleMarketCreation
       raise e
     end
   end
-  
+
+
   def self.all
 
     begin
       html        = BROWSER.creations_list CREAPATH
       # remote creations
       creations   = LittleMarket::Parser.creation_urls(html).map do |url|
-        params    = LittleMarket::Parser.creation BROWSER.creation(url)
+        crea_html = BROWSER.creation(url)
+        params    = LittleMarket::Parser.creation crea_html
         creation  = Creation.createFromLM params
+        imgs_params = []
+        LittleMarket::Parser.imgs(crea_html).each do |img_url|
+          imgs_params << BROWSER.img(img_url[:url], creation.id)
+        end
+        creation.update_attribute :imgs, imgs_params.join(',')
         { lmid: creation.lmid, title: creation.title, state: creation.state }
       end
       crea_set          = Set.new creations

@@ -35,6 +35,7 @@ module LittleMarket
         # 'trie$i'=>'400',
         # 'trie$i'=>'500'
       }
+      @@cookie = ''
       
       def self.login params
         username = params[:username]
@@ -50,6 +51,7 @@ module LittleMarket
         end
         @@connected = @@browser.has_text? /Bienvenue/
       end
+
 
       def self.get_creation url
         @@browser.visit url
@@ -73,24 +75,58 @@ module LittleMarket
         @@browser.html
       end
 
-      def self.publish creation
-
+      def self.set_cookies
         cookie  = @@browser.driver.cookies['sessid']
         cookies = []
         @@browser.driver.cookies.each_key do |k|
           Rails.logger.debug "#{@@browser.driver.cookies[k].name}=#{@@browser.driver.cookies[k].value}"
           cookies << "#{@@browser.driver.cookies[k].name}=#{@@browser.driver.cookies[k].value}"
         end
-        cookies = cookies.join ';'
+        @@cookies = cookies.join ';'
+      end
 
+      # Faraday.new(...) do |conn|
+      #   # POST/PUT params encoders:
+      #   conn.request :multipart
+      #   conn.request :url_encoded
+
+      #   conn.adapter :net_http
+      # end
+      # # uploading a file:
+      # payload[:profile_pic] = Faraday::UploadIO.new('/path/to/avatar.jpg', 'image/jpeg')
+
+      # # "Multipart" middleware detects files and encodes with "multipart/form-data":
+      # conn.put '/profile', payload
+
+      def self.get_img url, creation_id
+        host = 'http://galerie.alittlemarket.com'
+        conn = Faraday.new(:url => host) do |faraday|
+          faraday.request  :url_encoded             # form-encode POST params
+          faraday.response :logger                  # log requests to STDOUT
+          faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
+          faraday.use FaradayMiddleware::FollowRedirects, limit: 3    
+        end
+        response = conn.get url
+        img_path = Rails.root.join('imgs', creation_id.to_s, url.split('/')[-1]).to_s
+        FileUtils.mkdir_p File.dirname(img_path)
+        IO.binwrite img_path, response.body
+        # File.open(img_path, 'w') do |f|
+        #   f.write response.body
+        # end
+        img_path
+      end
+      
+      def self.publish creation
+
+        @@cookies.blank? and self.set_cookies
         Rails.logger.debug "COOKIES #{cookies}"
         
-        session = {}
+        # session = {}
         
-        [:domain, :path, :secure?, :httponly?, :expires].each do |p|
-          session[p] = cookie.send p
-        end
-        session_cookie = HTTP::Cookie.new(cookie.name, cookie.value, session)
+        # [:domain, :path, :secure?, :httponly?, :expires].each do |p|
+        #   session[p] = cookie.send p
+        # end
+        # session_cookie = HTTP::Cookie.new(cookie.name, cookie.value, session)
         # Rails.logger.debug "methods " + session_cookie.methods.sort.join("\n")
         # Rails.logger.debug "cookie value #{session_cookie.set_cookie_value}"
         # Rails.logger.debug "Ces putains de cookies : #{session}"

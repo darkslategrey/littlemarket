@@ -32,7 +32,7 @@ module LittleMarket
       default_format :json
       
       get '/' do
-        if ENV['RAILS_ENV'] == 'development'
+        if false # ENV['RAILS_ENV'] == 'development'
           [{:lmid=>15485607, :title=>"Programmes fait maison ", :state=>"published"}, {:lmid=>15485599, :title=>"Programmes fait maison ", :state=>"published"}, {:lmid=>15485593, :title=>"Programmes fait maison ", :state=>"published"}, {:lmid=>15485585, :title=>"Programmes fait maison ", :state=>"published"}, {:lmid=>15485583, :title=>"Programmes fait maison ", :state=>"published"}, {:lmid=>15485579, :title=>"Programmes fait maison ", :state=>"published"}, {:lmid=>15485573, :title=>"Programmes fait maison ", :state=>"published"}, {:lmid=>15485569, :title=>"Programmes fait maison ", :state=>"published"}, {:lmid=>15485567, :title=>"Programmes fait maison ", :state=>"published"}, {:lmid=>15485563, :title=>"Programmes fait maison ", :state=>"published"}, {:lmid=>15485561, :title=>"Programmes fait maison ", :state=>"published"}, {:lmid=>15485185, :title=>"Programmes fait maison ", :state=>"published"}, {:lmid=>15485181, :title=>"Programmes fait maison ", :state=>"published"}]          
         else
           creations = LittleMarketCreation.all
@@ -65,7 +65,7 @@ module LittleMarket
       
       get '/delete' do
         begin
-          if ENV['RAILS_ENV'] == 'development'
+          if false # ENV['RAILS_ENV'] == 'development'
             msg = "suppression de #{params[:lmid]}"
             { msg: msg, lmid: params[:lmid] }
           else
