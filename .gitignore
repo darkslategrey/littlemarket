@@ -20,3 +20,5 @@
 
 spec/fixtures/*.htm
 spec/fixtures/*_files
+
+coverage/*
