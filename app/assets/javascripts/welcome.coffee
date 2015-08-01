@@ -43,7 +43,11 @@ class CreationsList
     @checkAll = ko.observable false
     @items    = ko.observableArray([])
     @total    = ko.observable 0
-    
+    @showSpinner = ko.observable false
+    @showTable   = ko.observable false
+
+    @checkedItems = ko.observableArray([])
+     
     @loadData = ->
       this.showSpinner true
       self = this
@@ -53,32 +57,55 @@ class CreationsList
         self.showTable   true
         $("button[data-toogle='tooltip']").tooltip({delay: { "show": 500, "hide": 100 }})
         self.total(self.items().length)
-    @toogleCreations = ->
+
+
+
+    @creaChecked = (crea) ->
+      if crea.checked()
+        vm.checkedItems.push { lmid: crea.lmid(), obj: crea }
+      else
+        vm.checkedItems.remove (e) ->
+          return e.lmid == crea.lmid()
+          # { lmid: crea.lmid(), obj: crea }
+      return true
+      
+    @toogleCreations = (element, event) ->
+      if vm.checkAll()
+        e = $(event.currentTarget).next()
+        e.removeClass('label-danger')
+        e.addClass('label-success')
+        e.text('Aucun')
+      else
+        e = $(event.currentTarget).next()
+        e.removeClass('label-success')
+        e.addClass('label-danger')
+        e.text('Tous')
+
       for data in this.items()
         data.checked(this.checkAll())
       return true
-    
-    @showSpinner = ko.observable false
-    @showTable   = ko.observable false
-
-    @publishSelected = ->
-      console.log 'publish selected'
 
     @currentCreation = ko.observable ""
-    
+
+    @publishSelected = ->
+      lmids = []
+      @checkedItems().forEach (e) ->
+        crea = e.obj
+        if crea.state() != 'published'
+          crea.publish()
+          lmids.push e.lmid
+        
+      console.log 'publish selected ' + lmids
+        
     @deleteSelected = ->
-      selected = []
-      for data in @items()
-        if data.checked() == true        
-          console.log "selected " + data.lmid
-          self = this
-          @currentCreation(data)
-          success = (response) ->
-            console.log "response " + ko.toJSON(response)
-            @currentCreation().checked false
-            @currentCreation().state 'deleted'
-            
-          $.getJSON "/api/creations/delete?lmid=#{data.lmid}", success
+      lmids = []
+      @checkedItems().forEach (e) ->
+        crea = e.obj
+        if crea.state() != 'deleted'
+          crea.delete()
+          lmids.push e.lmid
+      console.log 'delete selected ' + lmids
+      
 
 vm = new CreationsList
 

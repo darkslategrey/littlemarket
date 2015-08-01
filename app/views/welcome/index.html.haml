@@ -10,7 +10,8 @@
       %tr
         %th
           %input{:type => 'checkbox', 'data-bind' => 'checked: checkAll, click: toogleCreations'}
-            Tous
+            .label.label-danger
+              Tous
         %th
           Id
         %th
@@ -22,7 +23,7 @@
     %tbody{"data-bind"=>'foreach: items'}
       %tr
         %td
-          %input{:type => 'checkbox', 'data-bind' => 'checked: $data.checked'}
+          %input{:type => 'checkbox', 'data-bind' => 'checked: $data.checked, click: $parent.creaChecked'}
         %td{"data-bind"=>'text: $data.lmid()'}
         %td{"data-bind"=>'text: $data.title'}
         %td{"data-bind"=>'text: $data.state()'}            

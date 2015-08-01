@@ -117,9 +117,9 @@ module LittleMarket
         xpath = '//table[@id="creation"]'
         table = nokodoc.xpath(xpath)
         tr    = table.first.xpath('.//tr').first
-        Rails.logger.debug "TR @@@@@@@@@ #{tr.to_html}"
+        # Rails.logger.debug "TR @@@@@@@@@ #{tr.to_html}"
         td    = tr.xpath('./td').children[1]
-        Rails.logger.debug "TD @@@@@@@@@ #{td.to_html}"
+        # Rails.logger.debug "TD @@@@@@@@@ #{td.to_html}"
         new_id= td.attr('value')
         # Rails.logger.debug "LINK @@@@@@@@@@@ #{new_id}"
         # new_id = link.split('&')[2].split('=')[1]
