@@ -65,7 +65,7 @@ module LittleMarket
       
       get '/delete' do
         begin
-          if false # ENV['RAILS_ENV'] == 'development'
+          if ENV['RAILS_ENV'] == 'development'
             msg = "suppression de #{params[:lmid]}"
             { msg: msg, lmid: params[:lmid] }
           else

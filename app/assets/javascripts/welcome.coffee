@@ -2,6 +2,23 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
+toastr.options = 
+  "closeButton": false
+  "debug": false
+  "newestOnTop": false
+  "progressBar": false
+  "positionClass": "toast-bottom-center"
+  "preventDuplicates": false
+  "onclick": null
+  "showDuration": "300"
+  "hideDuration": "300"
+  "timeOut": "600"
+  "extendedTimeOut": "1000"
+  "showEasing": "swing"
+  "hideEasing": "linear"
+  "showMethod": "fadeIn"
+  "hideMethod": "fadeOut"
+
   
 class Creation
   constructor: (@lmid, @title, @state) ->
