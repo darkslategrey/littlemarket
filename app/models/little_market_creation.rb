@@ -35,8 +35,10 @@ class LittleMarketCreation
         params    = LittleMarket::Parser.creation crea_html
         creation  = Creation.createFromLM params
         imgs_params = []
+        i = 0
         LittleMarket::Parser.imgs(crea_html).each do |img_url|
-          imgs_params << BROWSER.img(img_url[:url], creation.id)
+          imgs_params << BROWSER.img(img_url[:url], creation.id, i)
+          i += 1
         end
         creation.update_attribute :imgs, imgs_params.join(',')
         { lmid: creation.lmid, title: creation.title, state: creation.state }

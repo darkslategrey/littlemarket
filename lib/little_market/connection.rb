@@ -12,8 +12,8 @@ module LittleMarket
     @@connected = false
     @@browser   = nil
 
-    def img url, creation_id
-      @connector.get_img url, creation_id
+    def img url, creation_id, cpt
+      @connector.get_img url, creation_id, cpt
     end
     
     def initialize params

@@ -1,6 +1,5 @@
 # coding: utf-8
 
-
 module LittleMarket
 
   module Connector
@@ -11,31 +10,32 @@ module LittleMarket
 
       @@browser  = Capybara::Session.new :poltergeist
       @@cpt      = 0
+      @@cookies  = ''
       
       @@new_form = {
         '_action'=>'Form1',
         'actionHide'=>'continuer',
         'continuer'=>'continuer',
         'file'=>'',
-        'id_photo[]'=>[],
+        # 'id_photo[]'=>[],
         'input0'=>'1',
         'input1'=>'1',
         'input2'=>'1',
         'input3'=>'1',
         'input4'=>'1',
         'inputwizard'=>'',
-        'photo0'=>'',
-        'photo1'=>'',
-        'photo2'=>'',
-        'photo3'=>'',
-        'photo4'=>''
+        # 'photo0'=>'',
+        # 'photo1'=>'',
+        # 'photo2'=>'',
+        # 'photo3'=>'',
+        # 'photo4'=>''
         # 'trie$i'=>'100',
         # 'trie$i'=>'200',
         # 'trie$i'=>'300',
         # 'trie$i'=>'400',
         # 'trie$i'=>'500'
       }
-      @@cookie = ''
+
       
       def self.login params
         username = params[:username]
@@ -76,29 +76,17 @@ module LittleMarket
       end
 
       def self.set_cookies
-        cookie  = @@browser.driver.cookies['sessid']
-        cookies = []
+        # cookie  = @@browser.driver.cookies['sessid']
+        local_cookies = []
         @@browser.driver.cookies.each_key do |k|
           Rails.logger.debug "#{@@browser.driver.cookies[k].name}=#{@@browser.driver.cookies[k].value}"
-          cookies << "#{@@browser.driver.cookies[k].name}=#{@@browser.driver.cookies[k].value}"
+          local_cookies << "#{@@browser.driver.cookies[k].name}=#{@@browser.driver.cookies[k].value}"
         end
-        @@cookies = cookies.join ';'
+        @@cookies = local_cookies.join ';'
       end
 
-      # Faraday.new(...) do |conn|
-      #   # POST/PUT params encoders:
-      #   conn.request :multipart
-      #   conn.request :url_encoded
 
-      #   conn.adapter :net_http
-      # end
-      # # uploading a file:
-      # payload[:profile_pic] = Faraday::UploadIO.new('/path/to/avatar.jpg', 'image/jpeg')
-
-      # # "Multipart" middleware detects files and encodes with "multipart/form-data":
-      # conn.put '/profile', payload
-
-      def self.get_img url, creation_id
+      def self.get_img url, creation_id, cpt
         host = 'http://galerie.alittlemarket.com'
         conn = Faraday.new(:url => host) do |faraday|
           faraday.request  :url_encoded             # form-encode POST params
@@ -109,17 +97,79 @@ module LittleMarket
         response = conn.get url
         img_path = Rails.root.join('imgs', creation_id.to_s, url.split('/')[-1]).to_s
         FileUtils.mkdir_p File.dirname(img_path)
-        IO.binwrite img_path, response.body
+        outfile = File.dirname(img_path) + File::SEPARATOR + "img-#{cpt}.jpg"
+        IO.binwrite outfile, response.body
         # File.open(img_path, 'w') do |f|
         #   f.write response.body
         # end
-        img_path
+        outfile
+      end
+
+      def self.post_imgs imgs_paths
+        host = 'http://www.alittlemarket.com'
+        headers = {
+          'User-Agent' => 'Mozilla/5.0 (X11; Linux x86_64; rv:39.0) Gecko/20100101 Firefox/39.0',
+          'Accept'     => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+          'Accept-Language' => 'en-US,en;q=0.5',
+          'Accept-Encoding' => 'gzip, deflate',
+          'X-Requested-With' => 'XMLHttpRequest',
+          # 'Content-Type'     => 'application/octet-stream',
+          'Referer'          => 'http://www.alittlemarket.com/page/creation/add.php?action=add',
+          'Connection'       => 'keep-alive',
+          'Pragma'           => 'no-cache',
+          'Cache-Control'    => 'no-cache',
+          'Cookie'           => @@cookies
+        }
+
+
+
+        # conn = Faraday.new(:url => host) do |faraday|
+
+        #   # POST/PUT params encoders:
+        #   faraday.request :multipart
+        #   faraday.request :url_encoded
+        #   faraday.response :logger
+        #   faraday.headers = headers # merge!(headers)
+        #   faraday.adapter :net_http
+        # end
+        i = 0
+        img_ids = []
+        imgs_paths.split(',').each do |path|
+          Rails.logger.debug "DEBUG : img path '#{path}'"
+          # payload[:profile_pic] = Faraday::UploadIO.new(path, 'image/jpeg')
+          url = "/upload.php?sell_id=&dup_id=&nbFile=1&trie=100&qqfile=img-#{i}.jpg"
+          response = RestClient.post host+url, File.new(path, 'rb'), headers
+          # payload  = { :file => Faraday::UploadIO.new(path, 'image/jpeg') }
+          # response = conn.post url, payload
+          # response = conn.post do |req|
+          #   req.url url
+          #   req.body = Faraday::UploadIO.new(path, 'image/jpeg')
+          # end
+          # body     = IO.binread path
+          # headers['X-File-Name']      = "img-#{i}.jpg"
+          # headers['Content-Length']   = body.length.to_s
+          # response = conn.post do |req|
+          #   req.url path
+          #   req.body    = body
+          #   req.headers = headers
+          # end
+          # io          = StringIO.new(response.body)
+          # gzip_reader = Zlib::GzipReader.new(io)
+          # Rails.logger.debug "RESONSE #{gzip_reader.read}"
+          Rails.logger.debug "RESONSE #{response.body}"
+          json_response = JSON.parse(response.body)
+          raise "Erreur lors de la publication des images" if json_response['success'] == false
+          img_ids << { id: json_response['id'], realfilename: json_response['realfilename'] }
+          i += 1
+        end
+        Rails.logger.debug "IMGS IDS #{img_ids}"
+        img_ids
       end
       
       def self.publish creation
 
         @@cookies.blank? and self.set_cookies
-        Rails.logger.debug "COOKIES #{cookies}"
+        Rails.logger.debug "COOKIES #{@@cookies}"
         
         # session = {}
         
@@ -139,17 +189,29 @@ module LittleMarket
           faraday.adapter  Faraday.default_adapter
         end
         post_data = @@new_form.to_param + '&' + creation.to_new_form
+        img_ids      = post_imgs creation.imgs
+        i = -1
+        photo_params = img_ids.map do |element|
+          i += 1          
+          "id_photo[]=#{element[:id]}&photo#{i}=#{element[:realfilename]}"
+        end.join('&')
+        post_data += '&' + photo_params
+
         Rails.logger.debug "POST DATA #{post_data}"
         resp = conn.post('/page/creation/add.php?action=add') do |request|
-          request.headers.merge!({ :Cookie => cookies }) # session_cookie.set_cookie_value})
+          request.headers.merge!({ :Cookie => @@cookies }) # session_cookie.set_cookie_value})
           request.body = post_data
         end
         # Rails.logger.debug resp.body
+        # File.open('/tmp/out.html', 'wb') do |f| f.write(resp.body) end
         nokodoc = Nokogiri::HTML(resp.body)
         nokodoc.xpath('//li[@class="errors"]').each do |error|
           Rails.logger.error "PUBLISH ERROR '#{error.text}" 
         end
-
+        resp = conn.get '/page/creation/list.php' do |request|
+          request.headers.merge!({ :Cookie => @@cookies })
+        end
+        nokodoc = Nokogiri::HTML(resp.body)        
         xpath = '//table[@id="creation"]'
         table = nokodoc.xpath(xpath)
         tr    = table.first.xpath('.//tr').first
