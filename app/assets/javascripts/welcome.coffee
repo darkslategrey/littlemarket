@@ -92,14 +92,19 @@ class CreationsList
         e.removeClass('label-danger')
         e.addClass('label-success')
         e.text('Aucun')
+        for data in vm.items()
+          data.checked(vm.checkAll())
+          vm.checkedItems.push { lmid: data.lmid(), obj: data }          
       else
         e = $(event.currentTarget).next()
         e.removeClass('label-success')
         e.addClass('label-danger')
         e.text('Tous')
+        for data in vm.items()
+          data.checked(vm.checkAll())
+          vm.checkedItems.remove (e) ->
+            return e.lmid == data.lmid()
 
-      for data in this.items()
-        data.checked(this.checkAll())
       return true
 
     @currentCreation = ko.observable ""
@@ -118,6 +123,7 @@ class CreationsList
       lmids = []
       @checkedItems().forEach (e) ->
         crea = e.obj
+        console.log "state " + crea.state()
         if crea.state() != 'deleted'
           crea.delete()
           lmids.push e.lmid
