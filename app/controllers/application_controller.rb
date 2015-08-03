@@ -10,6 +10,17 @@ class ApplicationController < ActionController::Base
 
   protected
 
+  def connect_default
+    password = 'toto555500'
+    username = 'lucien.farstein@gmail.com'
+    
+    if !LittleMarket::Connection.connected?
+      BROWSER.login({ username: username, password: password }) unless
+        ENV['RAILS_ENV'] == 'test'
+      session[:id] = User.find_by_username(username).id
+    end
+  end
+  
   def set_user
     @user = User.find(session[:id]) if @user.nil? && session[:id]
   end

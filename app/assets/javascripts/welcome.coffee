@@ -6,13 +6,13 @@ toastr.options =
   "closeButton": false
   "debug": false
   "newestOnTop": false
-  "progressBar": false
+  "progressBar": true
   "positionClass": "toast-bottom-center"
   "preventDuplicates": false
   "onclick": null
-  "showDuration": "300"
-  "hideDuration": "300"
-  "timeOut": "600"
+  "showDuration": "800"
+  "hideDuration": "800"
+  "timeOut": "1000"
   "extendedTimeOut": "1000"
   "showEasing": "swing"
   "hideEasing": "linear"
@@ -21,38 +21,65 @@ toastr.options =
 
   
 class Creation
-  constructor: (@lmid, @title, @state) ->
-    @checked = ko.observable false
-    @state   = ko.observable @state
-    @lmid   = ko.observable @lmid
+  constructor: (@lmid, @title, @state, @vm) ->
+    @checked    = ko.observable false
+    @state      = ko.observable @state
+    @lmid       = ko.observable @lmid
+    @processing = ko.observable ''
+    @self       = this
     
   published: ->
     return @state() == 'published'
 
+
+  deleteItem: ->
+    @self.processing 'danger'
+    url      = '/api/creations/delete?lmid=' + @lmid() + '&title=' + @title
+    newState = 'deleted'
+    errorMsg = "' n'est pas supprimé"
+
+    $.when(@doAjax(url, newState, errorMsg)).done (->
+      @processing('')).bind(this)
+
+  publishItem: ->
+    @self.processing 'success'
+    console.log 'publish ' + @lmid()
+    url      = '/api/creations/publish?lmid=' + @lmid()
+    newState = 'published'
+    errorMsg = "' n'a pas été publiée"
+
+    $.when(@doAjax(url, newState, errorMsg)).done (->
+      @processing('')).bind(this)
+    
   delete: ->
     console.log 'delete ' + @lmid()
-    $.ajax
-      url:'/api/creations/delete?lmid=' + @lmid() + '&title=' + @title
-      success: ((response) ->
-        toastr.success "" + response.msg, "Succès"
-        @state('deleted')).bind(this)
-      error: ((response) ->
-        toastr.error "'" + response.title + "' n'est pas supprimé", "Echec"
-        console.log "ajax fail ").bind(this)
-      
+    url      = '/api/creations/delete?lmid=' + @lmid() + '&title=' + @title
+    newState = 'deleted'
+    errorMsg = "' n'est pas supprimé"
+
+    $.when(@doAjax(url, newState, errorMsg)).done(console.log('done!!'))
+
   publish: ->
-    console.log 'publish' + @lmid()
-    $.ajax
-      url:'/api/creations/publish?lmid=' + @lmid()
+    console.log 'publish ' + @lmid()
+    url      = '/api/creations/publish?lmid=' + @lmid()
+    newState = 'published'
+    errorMsg = "' n'a pas été publiée"
+
+    $.when(@doAjax(url, newState, errorMsg)).done(console.log('done!!!'))
+    
+  doAjax: (url, newState, errorMsg) ->
+    return $.ajax
+      url: url
       success: ((response) ->
         toastr.success "" + response.msg, "Succès"
-        @lmid(response.lmid)
-        @state('published')).bind(this)
+        if url.match('publish')
+          @lmid(response.lmid)
+        @state(newState)).bind(this)
       error: ((response) ->
-        toastr.error "'" + response.title + "' n'à pas été publiée", "Echec"
+        toastr.error "'" + response.title + errorMsg, "Echec"
         console.log "ajax fail ").bind(this)
 
-    
+            
 class CreationsList
 
   constructor: ->
@@ -62,14 +89,15 @@ class CreationsList
     @total    = ko.observable 0
     @showSpinner = ko.observable false
     @showTable   = ko.observable false
-
+    @spinnerText = ko.observable ''
     @checkedItems = ko.observableArray([])
      
     @loadData = ->
+      this.spinnerText 'Chargement de vos creations...'
       this.showSpinner true
       self = this
       $.getJSON "/api/creations", (creations) ->
-        vm.items.push(new Creation(data.lmid, data.title, data.state)) for data in creations
+        vm.items.push(new Creation(data.lmid, data.title, data.state, vm)) for data in creations
         self.showSpinner false
         self.showTable   true
         $("button[data-toogle='tooltip']").tooltip({delay: { "show": 500, "hide": 100 }})
@@ -110,30 +138,46 @@ class CreationsList
     @currentCreation = ko.observable ""
 
     @publishSelected = ->
-      lmids = []
+      @showSpinner true
+      @spinnerText 'Opération en cours...'
+      $.when(@publishItems()).done ->
+        vm.showSpinner false        
+
+
+    @publishItems = ->
+      # @lmids = []
       @checkedItems().forEach (e) ->
         crea = e.obj
         if crea.state() != 'published'
-          crea.publish()
-          lmids.push e.lmid
-        
-      console.log 'publish selected ' + lmids
+          # crea.processing('success')
+          crea.publishItem()
+          # $.when(crea.publish()).done(console.log('done!!!'))
         
     @deleteSelected = ->
-      lmids = []
+      @showSpinner true
+      @spinnerText 'Opération en cours...'
+      $.when(@deleteItems()).done ->
+        vm.showSpinner false
+        # console.log 'delete selected ' + lmids
+        
+    @deleteItems = ->
+      # @lmids = []
       @checkedItems().forEach (e) ->
         crea = e.obj
         console.log "state " + crea.state()
         if crea.state() != 'deleted'
-          crea.delete()
-          lmids.push e.lmid
-      console.log 'delete selected ' + lmids
+          # crea.processing('danger')
+          crea.deleteItem()
+          # $.when(crea.delete()).done(console.log('done!!!!'))
       
 
 vm = new CreationsList
 
 
-vm.loadData()
+if not window.location.href.toString().match '/user/login'
+  vm.loadData()
+
 
 ko.applyBindings vm
 
+console.log window.location.href.toString()

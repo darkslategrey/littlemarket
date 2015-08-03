@@ -1,6 +1,6 @@
 #spinner-container
   %div{"data-bind" => "visible: showSpinner"}
-    %h4 Chargement de vos creations...
+    %h4{"data-bind" => "text: spinnerText"}
     .spinner
 
 
@@ -21,7 +21,7 @@
         %th
           Actions
     %tbody{"data-bind"=>'foreach: items'}
-      %tr
+      %tr{'data-bind' => 'css: $data.processing()'}
         %td
           %input{:type => 'checkbox', 'data-bind' => 'checked: $data.checked, click: $parent.creaChecked'}
         %td{"data-bind"=>'text: $data.lmid()'}
@@ -31,11 +31,11 @@
           %button.btn.btn-danger.btn-xs{:type => "button", 'data-toogle' => 'tooltip',
                                         'data-placement' => 'top',
                                         :title => 'Supprimer de Little Market',
-                                        'data-bind' => 'visible: $data.state() == "published", click: $data.delete'} Supprimer
+                                        'data-bind' => 'visible: $data.state() == "published", click: $data.deleteItem'} Supprimer
           %button.btn.btn-success.btn-xs{:type => "button", 'data-toogle' => 'tooltip',
                                         'data-placement' => 'top',
                                         :title => 'Publier sur Little Market',
-                                        'data-bind' => 'visible: $data.state() == "deleted", click: $data.publish'} Publier
+                                        'data-bind' => 'visible: $data.state() == "deleted", click: $data.publishItem'} Publier
 
 
   .well{ 'data-bind' => 'visible: total() == 0'}

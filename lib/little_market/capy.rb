@@ -224,7 +224,7 @@ module LittleMarket
         # xpath   = '//table[@id="creation"]/tr[2]/td[4]/span[2]'
         # Rails.logger.debug "NOKODOC #{nokodoc.xpath(xpath).count}"
         # new_id  = nokodoc.xpath(xpath).first.text.split(':')[1]
-        Rails.logger.debug "NEW ID #{new_id}"        
+        Rails.logger.debug "OLD ID #{creation.lmid} NEW ID #{new_id}"        
         creation.update_attributes! lmid: new_id
         # resp
       end
