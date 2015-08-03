@@ -1,2 +1,54 @@
-%h1 Welcome#index
-%p Find me in app/views/welcome/index.html.haml
+#spinner-container
+  %div{"data-bind" => "visible: showSpinner"}
+    %h4 Chargement de vos creations...
+    .spinner
+
+
+%div{"data-bind" => "visible: showTable"}
+  %table.table.table-hover
+    %thead
+      %tr
+        %th
+          %input{:type => 'checkbox', 'data-bind' => 'checked: checkAll, click: toogleCreations'}
+            .label.label-danger
+              Tous
+        %th
+          Id
+        %th
+          Titre
+        %th
+          Publiée / Supprimée
+        %th
+          Actions
+    %tbody{"data-bind"=>'foreach: items'}
+      %tr
+        %td
+          %input{:type => 'checkbox', 'data-bind' => 'checked: $data.checked, click: $parent.creaChecked'}
+        %td{"data-bind"=>'text: $data.lmid()'}
+        %td{"data-bind"=>'text: $data.title'}
+        %td{"data-bind"=>'text: $data.state()'}            
+        %td
+          %button.btn.btn-danger.btn-xs{:type => "button", 'data-toogle' => 'tooltip',
+                                        'data-placement' => 'top',
+                                        :title => 'Supprimer de Little Market',
+                                        'data-bind' => 'visible: $data.state() == "published", click: $data.delete'} Supprimer
+          %button.btn.btn-success.btn-xs{:type => "button", 'data-toogle' => 'tooltip',
+                                        'data-placement' => 'top',
+                                        :title => 'Publier sur Little Market',
+                                        'data-bind' => 'visible: $data.state() == "deleted", click: $data.publish'} Publier
+
+
+  .well{ 'data-bind' => 'visible: total() == 0'}
+    Aucune créations présentes sur LM
+              
+  %button.btn.btn-success{:type => "button", 'data-toogle' => 'tooltip',
+                          'data-placement' => 'top',
+                          :title => 'En cliquant vous recréez vos créations sur Little Market',
+                          'data-bind' => 'click: publishSelected'}
+    Publier la sélection
+  %button.btn.btn-danger{:type => "button", 'data-toogle' => 'tooltip',
+                         'data-placement' => 'top',
+                         :title => 'En cliquant vous supprimez vos créations de Little Market',
+                         'data-bind' => 'click: deleteSelected'}
+    Supprimer la sélection
+

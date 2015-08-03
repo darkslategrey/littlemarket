@@ -14,8 +14,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require bootstrap-sprockets
-//= require knockout
+//  = require bootstrap-sprockets
+//  = require knockout
 //= require toastr/toastr
-//= require_tree .
+
 
