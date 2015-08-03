@@ -7,7 +7,7 @@ task :rm do
 end
 
 desc 'build windows dist file'
-task :ocra => [:rm] do
+task :ocra => [:environment, :rm] do
   Creation.all.each do |c| c.destroy! end
   options = "--output ../RailsApp.exe --add-all-core --gemfile Gemfile "
   options += "--no-dep-run --gem-full --chdir-first " # --no-lzma "
