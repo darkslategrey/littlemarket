@@ -8,8 +8,9 @@ end
 
 desc 'build windows dist file'
 task :ocra => [:rm] do
+  Creation.all.each do |c| c.destroy! end
   options = "--output ../RailsApp.exe --add-all-core --gemfile Gemfile "
-  options += "--no-dep-run --gem-full --chdir-first --no-lzma "
+  options += "--no-dep-run --gem-full --chdir-first " # --no-lzma "
   options += "--dll libyaml-0-2.dll "
   options += "--no-enc "
   # options += "--innosetup railsapp.iss -- server"

@@ -77,8 +77,9 @@ class Creation
         @state(newState)).bind(this)
       error: ((response) ->
         toastr.error "'" + response.title + errorMsg, "Echec"
+        @processing ''
         console.log "ajax fail ").bind(this)
-
+        
             
 class CreationsList
 
