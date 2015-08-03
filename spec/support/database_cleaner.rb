@@ -1,2 +1,0 @@
-# DatabaseCleaner.strategy = :truncation
-

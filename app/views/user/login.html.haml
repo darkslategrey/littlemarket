@@ -1,8 +1,0 @@
-= form_tag('process_login', class: 'form-signin') do
-  %h2.form-signin-heading Vous connecter
-  = email_field_tag('user[username]',    '', class: 'form-control', placeholder: 'Email address')
-  = password_field_tag('user[password]', '',   class: 'form-control', placeholder: 'Password')
-  = submit_tag('Se connecter', class: 'btn.btn-lg.btn-primary.btn-block')
-
-
-= link_to "S'enregistrer", action: 'register'

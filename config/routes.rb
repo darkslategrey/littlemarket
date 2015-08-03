@@ -1,24 +1,9 @@
 Rails.application.routes.draw do
-
-  mount JasmineRails::Engine => '/specs' if defined?(JasmineRails)
-  mount LittleMarket::API => '/api'
-  
-  get 'user/login'
-
-  get 'user/register'
-
-  post 'user/process_login'
-  post 'user/process_registration'
-  
-  get 'user/logout'
-
-  get 'user/my_account'
-
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'welcome#index'
+  # root 'welcome#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

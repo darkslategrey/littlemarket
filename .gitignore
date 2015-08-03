@@ -15,11 +15,4 @@
 /log/*
 !/log/.keep
 /tmp
-
-/bin/phantomjs*
-
-spec/fixtures/*.htm
-spec/fixtures/*_files
-
-coverage/*
-imgs
+*.orig
