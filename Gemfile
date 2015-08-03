@@ -51,7 +51,6 @@ group :development, :test do
   gem 'simplecov', :require => false
   # gem 'airborne', :require => false
 
-  gem 'rest-client'
   gem 'vcr'
   gem 'jasmine-rails'
 end
@@ -76,3 +75,5 @@ gem 'faraday'
 gem 'faraday-cookie_jar'
 gem 'faraday_middleware'
 gem 'rest-client'
+gem 'tzinfo-data', platforms: [:mingw, :mswin]
+gem 'ocra', platforms: [:mingw, :mswin]

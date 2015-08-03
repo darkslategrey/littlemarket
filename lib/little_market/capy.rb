@@ -62,7 +62,6 @@ module LittleMarket
           ccpt += 1
         end
         html = @@browser.html        
-        File.open("/tmp/html_1_#{@@cpt}.html", 'w') { |file| file.write(html) }
         @@cpt += 1
         # find(:xpath, "//table/tr").click                
         html

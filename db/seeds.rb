@@ -1,6 +1,6 @@
 # coding: utf-8
 user = User.find_by_username 'lucien.farstein@gmail.com'
-!user.nil? && User.create(username: 'lucien.farstein@gmail.com', password: 'toto555500')
+user.nil? && User.create(username: 'lucien.farstein@gmail.com', password: 'toto555500')
 
 [['#CECECE','Argenté'],
  ['#F3F3D6','Beige'],
@@ -30,7 +30,7 @@ user = User.find_by_username 'lucien.farstein@gmail.com'
  ['#00a096','Turquoise'],
  ['#007325','Vert'],
  ['#980d7d','Violet']].each do |e|
-  Color.create!(hex: e[0], name: e[1])
+  Color.create!(hex: e[0], name: e[1]) if Color.find_by_name(e[1]).nil?
 end
 
 [
@@ -157,5 +157,5 @@ end
   ['VINYLE','Vinyle'],
   ['VISCOSE','Viscose'],
   ['ZINC','Zinc']].each do |e|
-  Material.create!(name: e[0], value: e[1])
+  Material.create!(name: e[0], value: e[1]) if Material.find_by_name(e[0]).nil?
 end
