@@ -14,6 +14,6 @@ task :ocra => [:environment, :rm] do
   options += "--dll libyaml-0-2.dll "
   options += "--no-enc "
   # options += "--innosetup railsapp.iss -- server"
-  out = %x[bundle exec ocra bin/rails . #{options} -- server]
+  out = %x[bundle exec ocra bin/rails . #{options} -- server -e production]
   puts out
 end
