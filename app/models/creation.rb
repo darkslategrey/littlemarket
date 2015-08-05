@@ -1,7 +1,7 @@
 class Creation < ActiveRecord::Base
 
 
-  def self.createFromLM creationLM, force: false
+  def self.createFromLM creationLM, force: true
     params = {}
     creationLM.each_pair do |k, v|
 
