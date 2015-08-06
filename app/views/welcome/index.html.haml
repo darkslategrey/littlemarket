@@ -51,4 +51,9 @@
                          :title => 'En cliquant vous supprimez vos créations de Little Market',
                          'data-bind' => 'click: deleteSelected'}
     Supprimer la sélection
+  %button#sync-button.btn.btn-info{:type => "button", 'data-toogle' => 'tooltip',
+                         'data-placement' => 'top',
+                       :title => 'Synchroniser vos créations si vous avez effectué des modifications sur Little Market',
+                       'data-bind' => 'click: loadData'}
+    Synchroniser vos créations
 

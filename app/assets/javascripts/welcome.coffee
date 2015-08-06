@@ -96,6 +96,8 @@ class CreationsList
     @loadData = ->
       this.spinnerText 'Chargement de vos creations...'
       this.showSpinner true
+      this.showTable false
+      this.items []      
       self = this
       $.getJSON "/api/creations", (creations) ->
         vm.items.push(new Creation(data.lmid, data.title, data.state, vm)) for data in creations
@@ -107,22 +109,27 @@ class CreationsList
 
 
     @creaChecked = (crea) ->
-      if crea.checked()
+      console.log "crea id " + crea.lmid()
+      if crea.checked
         vm.checkedItems.push { lmid: crea.lmid(), obj: crea }
       else
         vm.checkedItems.remove (e) ->
-          return e.lmid == crea.lmid()
+          return e.lmid() == crea.lmid()
           # { lmid: crea.lmid(), obj: crea }
       return true
       
     @toogleCreations = (element, event) ->
+      console.log "checkAll " + vm.checkAll()
+      console.log "vm items " + vm.items().length
       if vm.checkAll()
         e = $(event.currentTarget).next()
         e.removeClass('label-danger')
         e.addClass('label-success')
         e.text('Aucun')
         for data in vm.items()
-          data.checked(vm.checkAll())
+          console.log "AVANT " + data.lmid() + " " + data.checked()          
+          data.checked(true)
+          console.log "APRES " + data.lmid() + " " + data.checked()
           vm.checkedItems.push { lmid: data.lmid(), obj: data }          
       else
         e = $(event.currentTarget).next()
@@ -130,7 +137,9 @@ class CreationsList
         e.addClass('label-danger')
         e.text('Tous')
         for data in vm.items()
-          data.checked(vm.checkAll())
+          console.log "AVANT " + data.lmid() + " " + data.checked()                    
+          data.checked(false)
+          console.log "APRES " + data.lmid() + " " + data.checked()          
           vm.checkedItems.remove (e) ->
             return e.lmid == data.lmid()
 
